@@ -26,11 +26,11 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('logger')
             ->end()
             ->arrayNode('error')
-            ->children()
-            ->scalarNode('receiver')
-            ->isRequired()
-            ->end()
-            ->end()
+                ->children()
+                    ->scalarNode('receiver')
+                    ->isRequired()
+                    ->end()
+                ->end()
             ->end()
             ->end();
 

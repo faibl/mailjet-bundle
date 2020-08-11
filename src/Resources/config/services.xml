@@ -21,26 +21,5 @@
 
         <service id="Faibl\MailjetBundle\Serializer\Normalizer\MailjetMailNormalizer" public="false">
         </service>
-
-
-        <!--        <service id="Faibl\MailjetBundle\Search\Manager\SearchClient" public="false">-->
-<!--        </service>-->
-
-
-<!--        <service id="Faibl\MailjetBundle\Services\SearchService" public="false">-->
-<!--            <argument type="service" id="Faibl\MailjetBundle\Search\Manager\SearchManager"/>-->
-<!--        </service>-->
-
-<!--        <service id="Faibl\MailjetBundle\Repository\SearchRepository" public="false">-->
-<!--            <argument type="service" id="Faibl\MailjetBundle\Services\SearchService"/>-->
-<!--        </service>-->
-
-
-<!--        <service id="Faibl\MailjetBundle\Command\SearchIndexCommand" public="false">-->
-<!--            <argument type="service" id="doctrine.orm.entity_manager"/>-->
-<!--            <argument type="service" id="Faibl\MailjetBundle\Services\SearchService"/>-->
-<!--            <tag name="console.command" />-->
-<!--        </service>-->
-
     </services>
 </container>

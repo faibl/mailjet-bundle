@@ -6,14 +6,11 @@ use Faibl\MailjetBundle\Model\MailjetBasicMail;
 use Faibl\MailjetBundle\Model\MailjetMail;
 use Faibl\MailjetBundle\Model\MailjetReceiver;
 use Faibl\MailjetBundle\Model\MailjetTemplateMail;
-use App\Util\ArrayUtil;
+use Faibl\MailjetBundle\Util\ArrayUtil;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class MailjetMailNormalizer implements NormalizerInterface
 {
-    const SENDER_NAME = 'ZEIT ONLINE Studienorientierung';
-    const SENDER_MAIL = 'norelpy@suma.mailing.zeit.de';
-
     public function normalize($object, $format = null, array $context = [])
     {
         if (!$object instanceof MailjetMail) {
@@ -53,25 +50,34 @@ class MailjetMailNormalizer implements NormalizerInterface
         return $messages;
     }
 
+    private function normalizeBasicMail(MailjetBasicMail $mail, array $context = []): array
+    {
+        $mail =  array_merge(
+            $this->normalizeMessageBase($mail),
+            $this->normalizeBasicMailContent($mail)
+        );
+
+        return ArrayUtil::filterEmptyRecursive($mail);
+    }
+
     private function normalizeBasicMailContent(MailjetBasicMail $mail, array $context = []): array
     {
-        return array_merge(
-            $this->normalizeMessageBase($mail),
-            [
-                'From' => [
-                    'Email' => self::SENDER_MAIL,
-                    'Name' => self::SENDER_NAME,
-                ],
-                'Subject' => $mail->getSubject(),
-                'TextPart' => $mail->getTextPart(),
-                'HtmlPart' => $mail->getHtmlPart(),
-                'Attachments' => [[
-                    'ContentType' => $mail->getAttachment()->getContentType(),
-                    'Filename' => $mail->getAttachment()->getFilename(),
-                    'Base64Content' => $mail->getAttachment()->getContent(),
-                ]],
-            ]
-        );
+        return [
+            'From' => $mail->getSender() ? $this->normalizeReceiver($mail->getSender()) : null,
+            'Subject' => $mail->getSubject(),
+            'TextPart' => $mail->getTextPart() ?? null,
+            'HtmlPart' => $mail->getHtmlPart() ?? null,
+            'Attachments' => $this->normalizeAttachment($mail),
+        ];
+    }
+
+    private function normalizeAttachment(MailjetBasicMail $mail, array $context = []): array
+    {
+        return $mail->getAttachment() ? [[
+            'ContentType' => $mail->getAttachment()->getContentType(),
+            'Filename' => $mail->getAttachment()->getFilename(),
+            'Base64Content' => $mail->getAttachment()->getContent(),
+        ]] : [];
     }
 
     private function normalizeTemplateMailContent(MailjetTemplateMail $mail, array $context = []): array
@@ -92,19 +98,24 @@ class MailjetMailNormalizer implements NormalizerInterface
     private function normalizeMessageBase(MailjetMail $mail): array
     {
         return [
-            'To' => $this->normalizeReceiver($mail->getReceiver()),
-            'Cc' => $this->normalizeReceiver($mail->getReceiverCC()),
-            'Bc' => $this->normalizeReceiver($mail->getReceiverBC()),
+            'To' => $this->normalizeReceivers($mail->getReceiver()),
+            'Cc' => $this->normalizeReceivers($mail->getReceiverCC()),
+            'Bc' => $this->normalizeReceivers($mail->getReceiverBC()),
         ];
     }
 
-    private function normalizeReceiver(array $receiver): array
+    private function normalizeReceivers(array $receivers): array
     {
         return array_map(function (MailjetReceiver $receiver) {
-            return [
-                'Email' => $receiver->getEmail(),
-                'Name' => $receiver->getName(),
-            ];
-        }, $receiver);
+            return $this->normalizeReceiver($receiver);
+        }, $receivers);
+    }
+
+    private function normalizeReceiver(MailjetReceiver $receiver): array
+    {
+        return [
+            'Email' => $receiver->getEmail(),
+            'Name' => $receiver->getName(),
+        ];
     }
 }

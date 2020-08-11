@@ -2,7 +2,7 @@
 
 namespace Faibl\MailjetBundle\Services;
 
-use App\Exception\MailException;
+use Faibl\MailjetBundle\Exception\MailException;
 use Faibl\MailjetBundle\Model\MailjetMail;
 use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Mailjet\Client;
@@ -42,6 +42,7 @@ class MailjetService implements MailjetServiceInterface
             );
             //@todo: use newer version of monolog and proper rollbar handler..
             $this->logger->error($error);
+            
             throw new MailException($error);
         }
 
