@@ -10,28 +10,43 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('faibl_mailjet');
-        $rootNode = $treeBuilder->getRootNode();
-        $rootNode
+
+        $treeBuilder->getRootNode()
             ->children()
                 ->arrayNode('api')
                     ->children()
+                        ->scalarNode('version')
+                            ->defaultValue('3.1')
+                        ->end()
                         ->scalarNode('key')
                             ->isRequired()
-                            ->end()
+                            ->cannotBeEmpty()
+                        ->end()
                         ->scalarNode('secret')
                             ->isRequired()
-                            ->end()
+                            ->cannotBeEmpty()
+                        ->end()
                     ->end()
-                ->end()
-            ->scalarNode('logger')
-            ->end()
-            ->arrayNode('error')
-                ->children()
-                    ->scalarNode('receiver')
-                    ->isRequired()
+                ->end() // api
+                ->scalarNode('logger')
+                ->end() // logger
+                ->arrayNode('delivery')
+                    ->children()
+                        ->scalarNode('disabled')
+                            ->defaultFalse()
+                        ->end()
+                        ->scalarNode('address')
+                            ->defaultNull()
+                        ->end()
                     ->end()
-                ->end()
-            ->end()
+                ->end() // delivery
+                ->arrayNode('error')
+                    ->children()
+                        ->scalarNode('receiver')
+                        ->isRequired()
+                        ->cannotBeEmpty()
+                    ->end()
+                ->end() // error
             ->end();
 
         return $treeBuilder;

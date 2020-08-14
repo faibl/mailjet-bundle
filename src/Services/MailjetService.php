@@ -7,6 +7,7 @@ use Faibl\MailjetBundle\Model\MailjetMail;
 use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Mailjet\Client;
 use Mailjet\Resources;
+use Mailjet\Response;
 use Psr\Log\LoggerInterface;
 
 class MailjetService implements MailjetServiceInterface
@@ -16,36 +17,39 @@ class MailjetService implements MailjetServiceInterface
     private $logger;
     private $mjClient;
     private $serializer;
-    private $receiverErrors;
+    private $deliverDisabled;
 
-    public function __construct(MailjetMailSerializer $serializer, LoggerInterface $loggerRollbar, string $apiKey, string $apiSecret, string $receiverErrors)
+    public function __construct(MailjetMailSerializer $serializer, LoggerInterface $loggerRollbar, string $apiKey, string $apiSecret, string $apiVersion, bool $deliverDisabled = false)
     {
         $this->apiKey = $apiKey;
         $this->apiSecret = $apiSecret;
         $this->logger = $loggerRollbar;
         $this->serializer = $serializer;
-        $this->receiverErrors = $receiverErrors;
-        $this->mjClient = new Client($apiKey, $apiSecret, true, ['version' => 'v3.1']);
+        $this->deliverDisabled = $deliverDisabled;
+        $this->mjClient = new Client($apiKey, $apiSecret, true, ['version' => sprintf('v%s', $apiVersion)]);
     }
 
     public function send(MailjetMail $mail): bool
     {
-        $body = $this->serializer->normalize($mail, null, ['receiverErrors' => $this->receiverErrors]);
+        if (!$this->deliverDisabled) {
+            $response = $this->mjClient->post(Resources::$Email, ['body' => $this->serializer->normalize($mail)]);
+            $this->logErrors($response);
+        }
 
-        $response = $this->mjClient->post(Resources::$Email, ['body' => $body]);
+        return true;
+    }
 
+    public function logErrors(Response $response): void
+    {
         if ($response->getStatus() !== 200) {
             $error = sprintf(
                 'Unexpected API-Response. Status: %s, Message. %s',
                 $response->getStatus(),
                 json_encode($response->getBody())
             );
-            //@todo: use newer version of monolog and proper rollbar handler..
             $this->logger->error($error);
-            
+
             throw new MailException($error);
         }
-
-        return true;
     }
 }

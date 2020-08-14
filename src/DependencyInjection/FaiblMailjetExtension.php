@@ -6,33 +6,25 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class FaiblMailjetExtension extends Extension
+class FaiblMailjetExtension extends ConfigurableExtension
 {
-    public function load(array $configs, ContainerBuilder $container)
+    protected function loadInternal(array $config, ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
-
-        $configuration = $this->getConfiguration($configs, $container);
-        $config = $this->processConfiguration($configuration, $configs);
 
         $definition = $container->getDefinition('Faibl\MailjetBundle\Services\MailjetService');
         $definition->setArgument(1, new Reference($config['logger']));
         $definition->setArgument(2, $config['api']['key']);
         $definition->setArgument(3, $config['api']['secret']);
-        $definition->setArgument(4, $config['error']['receiver']);
+        $definition->setArgument(4, $config['api']['version']);
+        $definition->setArgument(5, $config['delivery']['disabled']);
 
-
-//        $definition = $container->getDefinition('Faibl\MailjetBundle\Search\Manager\SearchClient');
-//        $definition->setArgument(0, new Reference($config['logger']));
-//
-//        $definition = $container->getDefinition('Faibl\MailjetBundle\Search\Manager\SearchManager');
-//        $definition->setArgument(1, $config['mailjet']);
-//
-//
-//        $definition = $container->getDefinition('Faibl\MailjetBundle\Command\SearchIndexCommand');
-//        $definition->setArgument(2, $config['entity']['class']);
+        $definition = $container->getDefinition('Faibl\MailjetBundle\Serializer\Normalizer\MailjetMailNormalizer');
+        $definition->setArgument(0, $config['error']['receiver']);
+        $definition->setArgument(1, $config['delivery']['address']);
     }
 }

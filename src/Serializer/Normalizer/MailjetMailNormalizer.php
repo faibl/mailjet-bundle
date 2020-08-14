@@ -6,11 +6,25 @@ use Faibl\MailjetBundle\Model\MailjetBasicMail;
 use Faibl\MailjetBundle\Model\MailjetMail;
 use Faibl\MailjetBundle\Model\MailjetReceiver;
 use Faibl\MailjetBundle\Model\MailjetTemplateMail;
+use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Faibl\MailjetBundle\Util\ArrayUtil;
+use Mailjet\Client;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class MailjetMailNormalizer implements NormalizerInterface
 {
+    private $receiverErrors;
+    private $deliveryAddress;
+    private $deliveryDisabled;
+
+    public function __construct(string $receiverErrors, string $deliveryAddress = null, bool $deliveryDisabled = false)
+    {
+        $this->receiverErrors = $receiverErrors;
+        $this->deliveryAddress = $deliveryAddress;
+        $this->deliveryDisabled = $deliveryDisabled;
+    }
+
     public function normalize($object, $format = null, array $context = [])
     {
         if (!$object instanceof MailjetMail) {
@@ -89,7 +103,7 @@ class MailjetMailNormalizer implements NormalizerInterface
                 'TemplateID' => $mail->getTemplateId(),
                 'Variables' => $mail->getVariables(),
                 "TemplateErrorReporting" => [
-                    "Email" => $context['receiverErrors'],
+                    "Email" => $this->receiverErrors,
                 ],
             ]
         );
@@ -97,10 +111,16 @@ class MailjetMailNormalizer implements NormalizerInterface
 
     private function normalizeMessageBase(MailjetMail $mail): array
     {
+        if (empty($this->deliveryAddress)) {
+            return [
+                'To' => $this->normalizeReceivers($mail->getReceiver()),
+                'Cc' => $this->normalizeReceivers($mail->getReceiverCC()),
+                'Bc' => $this->normalizeReceivers($mail->getReceiverBC()),
+            ];
+        }
+
         return [
-            'To' => $this->normalizeReceivers($mail->getReceiver()),
-            'Cc' => $this->normalizeReceivers($mail->getReceiverCC()),
-            'Bc' => $this->normalizeReceivers($mail->getReceiverBC()),
+            'To' => [$this->normalizeReceiver(new MailjetReceiver($this->deliveryAddress))],
         ];
     }
 
