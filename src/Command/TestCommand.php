@@ -3,9 +3,9 @@
 namespace Faibl\MailjetBundle\Command;
 
 use Faibl\MailjetBundle\Exception\MailException;
-use Faibl\MailjetBundle\Model\MailjetBasicMail;
+use Faibl\MailjetBundle\Model\MailjetTextMail;
 use Faibl\MailjetBundle\Model\MailjetMail;
-use Faibl\MailjetBundle\Model\MailjetReceiver;
+use Faibl\MailjetBundle\Model\MailjetAddress;
 use Faibl\MailjetBundle\Model\MailjetTemplateMail;
 use Faibl\MailjetBundle\Services\MailjetService;
 use Faibl\MailjetBundle\Services\MailjetServiceInterface;
@@ -81,9 +81,9 @@ class TestCommand extends Command
 
     private function sendTestTextMail(string $receiver, string $sender): void
     {
-        $mail = (new MailjetBasicMail())
-            ->setSender((new MailjetReceiver($sender)))
-            ->addReceiver((new MailjetReceiver($receiver)))
+        $mail = (new MailjetTextMail())
+            ->setSender((new MailjetAddress($sender)))
+            ->addReceiver((new MailjetAddress($receiver)))
             ->setSubject('Testmail send by faibl-mailjet-bundle')
             ->setTextPart('Nothing to say...');
 
@@ -93,7 +93,7 @@ class TestCommand extends Command
     private function sendTemplateMail(string $receiver, int $templateId): void
     {
         $mail = (new MailjetTemplateMail($templateId))
-            ->addReceiver((new MailjetReceiver($receiver)));
+            ->addReceiver((new MailjetAddress($receiver)));
 
         $this->mailjetService->send($mail);
     }

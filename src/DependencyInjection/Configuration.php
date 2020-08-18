@@ -29,6 +29,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end() // api
                 ->scalarNode('logger')
+                    ->defaultValue('logger')
                 ->end() // logger
                 ->arrayNode('delivery')
                     ->children()

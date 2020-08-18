@@ -2,7 +2,7 @@
 
 namespace Faibl\MailjetBundle\Model;
 
-class MailjetReceiver
+class MailjetAddress
 {
     private $email;
     private $name;

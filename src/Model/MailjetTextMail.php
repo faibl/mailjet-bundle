@@ -2,20 +2,20 @@
 
 namespace Faibl\MailjetBundle\Model;
 
-class MailjetBasicMail extends MailjetMail
+class MailjetTextMail extends MailjetMail
 {
-    /** @var MailjetReceiver */
+    /** @var MailjetAddress */
     private $sender;
     private $subject;
     private $textPart;
     private $htmlPart;
 
-    public function getSender(): ?MailjetReceiver
+    public function getSender(): ?MailjetAddress
     {
         return $this->sender;
     }
 
-    public function setSender(MailjetReceiver $sender): self
+    public function setSender(MailjetAddress $sender): self
     {
         $this->sender = $sender;
 

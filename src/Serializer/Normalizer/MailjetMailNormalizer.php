@@ -2,14 +2,11 @@
 
 namespace Faibl\MailjetBundle\Serializer\Normalizer;
 
-use Faibl\MailjetBundle\Model\MailjetBasicMail;
+use Faibl\MailjetBundle\Model\MailjetTextMail;
 use Faibl\MailjetBundle\Model\MailjetMail;
-use Faibl\MailjetBundle\Model\MailjetReceiver;
+use Faibl\MailjetBundle\Model\MailjetAddress;
 use Faibl\MailjetBundle\Model\MailjetTemplateMail;
-use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Faibl\MailjetBundle\Util\ArrayUtil;
-use Mailjet\Client;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class MailjetMailNormalizer implements NormalizerInterface
@@ -18,14 +15,14 @@ class MailjetMailNormalizer implements NormalizerInterface
     private $deliveryAddress;
     private $deliveryDisabled;
 
-    public function __construct(string $receiverErrors, string $deliveryAddress = null, bool $deliveryDisabled = false)
+    public function __construct(string $receiverErrors = null, string $deliveryAddress = null, bool $deliveryDisabled = false)
     {
         $this->receiverErrors = $receiverErrors;
         $this->deliveryAddress = $deliveryAddress;
         $this->deliveryDisabled = $deliveryDisabled;
     }
 
-    public function normalize($object, $format = null, array $context = [])
+    public function normalize($object, string $format = null, array $context = [])
     {
         if (!$object instanceof MailjetMail) {
             return null;
@@ -43,7 +40,7 @@ class MailjetMailNormalizer implements NormalizerInterface
         ];
     }
 
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, string $format = null)
     {
         return $data instanceof MailjetMail;
     }
@@ -51,7 +48,7 @@ class MailjetMailNormalizer implements NormalizerInterface
     private function normalizeMessageContent(MailjetMail $mail, $context): array
     {
         switch (true) {
-            case ($mail instanceof MailjetBasicMail):
+            case ($mail instanceof MailjetTextMail):
                 $messages = $this->normalizeBasicMailContent($mail, $context);
                 break;
             case ($mail instanceof MailjetTemplateMail):
@@ -64,7 +61,7 @@ class MailjetMailNormalizer implements NormalizerInterface
         return $messages;
     }
 
-    private function normalizeBasicMail(MailjetBasicMail $mail, array $context = []): array
+    private function normalizeBasicMail(MailjetTextMail $mail, array $context = []): array
     {
         $mail =  array_merge(
             $this->normalizeMessageBase($mail),
@@ -74,7 +71,7 @@ class MailjetMailNormalizer implements NormalizerInterface
         return ArrayUtil::filterEmptyRecursive($mail);
     }
 
-    private function normalizeBasicMailContent(MailjetBasicMail $mail, array $context = []): array
+    private function normalizeBasicMailContent(MailjetTextMail $mail, array $context = []): array
     {
         return [
             'From' => $mail->getSender() ? $this->normalizeReceiver($mail->getSender()) : null,
@@ -85,7 +82,7 @@ class MailjetMailNormalizer implements NormalizerInterface
         ];
     }
 
-    private function normalizeAttachment(MailjetBasicMail $mail, array $context = []): array
+    private function normalizeAttachment(MailjetTextMail $mail, array $context = []): array
     {
         return $mail->getAttachment() ? [[
             'ContentType' => $mail->getAttachment()->getContentType(),
@@ -120,18 +117,18 @@ class MailjetMailNormalizer implements NormalizerInterface
         }
 
         return [
-            'To' => [$this->normalizeReceiver(new MailjetReceiver($this->deliveryAddress))],
+            'To' => [$this->normalizeReceiver(new MailjetAddress($this->deliveryAddress))],
         ];
     }
 
     private function normalizeReceivers(array $receivers): array
     {
-        return array_map(function (MailjetReceiver $receiver) {
+        return array_map(function (MailjetAddress $receiver) {
             return $this->normalizeReceiver($receiver);
         }, $receivers);
     }
 
-    private function normalizeReceiver(MailjetReceiver $receiver): array
+    private function normalizeReceiver(MailjetAddress $receiver): array
     {
         return [
             'Email' => $receiver->getEmail(),

@@ -19,11 +19,11 @@ class MailjetService implements MailjetServiceInterface
     private $serializer;
     private $deliverDisabled;
 
-    public function __construct(MailjetMailSerializer $serializer, LoggerInterface $loggerRollbar, string $apiKey, string $apiSecret, string $apiVersion, bool $deliverDisabled = false)
+    public function __construct(MailjetMailSerializer $serializer, LoggerInterface $logger, string $apiKey, string $apiSecret, string $apiVersion, bool $deliverDisabled = false)
     {
         $this->apiKey = $apiKey;
         $this->apiSecret = $apiSecret;
-        $this->logger = $loggerRollbar;
+        $this->logger = $logger;
         $this->serializer = $serializer;
         $this->deliverDisabled = $deliverDisabled;
         $this->mjClient = new Client($apiKey, $apiSecret, true, ['version' => sprintf('v%s', $apiVersion)]);

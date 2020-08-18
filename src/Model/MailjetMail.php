@@ -9,7 +9,7 @@ class MailjetMail
     private $receiverBC = [];
     private $attachment;
 
-    public function addReceiver(MailjetReceiver $receiver): self
+    public function addReceiver(MailjetAddress $receiver): self
     {
         $this->receiver[] = $receiver;
 
@@ -21,7 +21,7 @@ class MailjetMail
         return $this->receiver;
     }
 
-    public function addReceiverCC(MailjetReceiver $receiver): self
+    public function addReceiverCC(MailjetAddress $receiver): self
     {
         $this->receiverCC[] = $receiver;
 
@@ -33,7 +33,7 @@ class MailjetMail
         return $this->receiverCC;
     }
 
-    public function addReceiverBC(MailjetReceiver $receiver): self
+    public function addReceiverBC(MailjetAddress $receiver): self
     {
         $this->receiverBC[] = $receiver;
 
