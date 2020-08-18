@@ -85,7 +85,7 @@ class TestCommand extends Command
         return 1;
     }
 
-    private function sendTestTextMail(string $receiver, string $sender): bool
+    private function sendTestTextMail(string $receiver, string $sender): ?bool
     {
         $mail = (new MailjetTextMail())
             ->setSender((new MailjetAddress($sender)))
@@ -96,7 +96,7 @@ class TestCommand extends Command
         return $this->mailjetService->send($mail);
     }
 
-    private function sendTemplateMail(string $receiver, int $templateId): bool
+    private function sendTemplateMail(string $receiver, int $templateId): ?bool
     {
         $mail = (new MailjetTemplateMail($templateId))
             ->addReceiver((new MailjetAddress($receiver)));
