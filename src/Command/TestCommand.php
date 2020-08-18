@@ -4,11 +4,9 @@ namespace Faibl\MailjetBundle\Command;
 
 use Faibl\MailjetBundle\Exception\MailjetException;
 use Faibl\MailjetBundle\Model\MailjetTextMail;
-use Faibl\MailjetBundle\Model\MailjetMail;
 use Faibl\MailjetBundle\Model\MailjetAddress;
 use Faibl\MailjetBundle\Model\MailjetTemplateMail;
 use Faibl\MailjetBundle\Services\MailjetService;
-use Faibl\MailjetBundle\Services\MailjetServiceInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -79,7 +77,7 @@ class TestCommand extends Command
         } elseif ($success === false) {
             $this->io->error('E-Mail could not be sent. Check your logs for more information.');
         } else {
-            $this->io->text('No E-mail is sent. Dis you disable delivery?');
+            $this->io->warning('No E-mail sent. Did you disable delivery?');
         }
 
         return 1;
