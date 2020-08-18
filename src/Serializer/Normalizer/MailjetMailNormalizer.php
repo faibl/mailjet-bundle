@@ -22,7 +22,7 @@ class MailjetMailNormalizer implements NormalizerInterface
         $this->deliveryDisabled = $deliveryDisabled;
     }
 
-    public function normalize($object, string $format = null, array $context = [])
+    public function normalize($object, $format = null, array $context = [])
     {
         if (!$object instanceof MailjetMail) {
             return null;
@@ -40,7 +40,7 @@ class MailjetMailNormalizer implements NormalizerInterface
         ];
     }
 
-    public function supportsNormalization($data, string $format = null)
+    public function supportsNormalization($data, $format = null)
     {
         return $data instanceof MailjetMail;
     }
