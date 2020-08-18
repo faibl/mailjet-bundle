@@ -17,14 +17,20 @@ class FaiblMailjetExtension extends ConfigurableExtension
         $loader->load('services.xml');
 
         $definition = $container->getDefinition('Faibl\MailjetBundle\Services\MailjetService');
-        $definition->setArgument(1, new Reference($config['logger']));
-        $definition->setArgument(2, $config['api']['key']);
-        $definition->setArgument(3, $config['api']['secret']);
-        $definition->setArgument(4, $config['api']['version']);
-        $definition->setArgument(5, $config['delivery']['disabled']);
+        $definition->setArgument(2, new Reference($config['logger']));
+//        $definition->setArgument(2, $config['api']['key']);
+//        $definition->setArgument(3, $config['api']['secret']);
+//        $definition->setArgument(4, $config['api']['version']);
+//        $definition->setArgument(5, $config['delivery']['disabled']);
 
         $definition = $container->getDefinition('Faibl\MailjetBundle\Serializer\Normalizer\MailjetMailNormalizer');
         $definition->setArgument(0, $config['error']['receiver']);
         $definition->setArgument(1, $config['delivery']['address']);
+
+        $definition = $container->getDefinition('Mailjet\Client');
+        $definition->setArgument(0, $config['api']['key']);
+        $definition->setArgument(1, $config['api']['secret']);
+        $definition->setArgument(2, !$config['delivery']['disabled']);
+        $definition->setArgument(3, ['version' => sprintf('v%s', $config['api']['version'])]);
     }
 }

@@ -12,40 +12,31 @@ use Psr\Log\LoggerInterface;
 
 class MailjetService implements MailjetServiceInterface
 {
-    private $apiKey;
-    private $apiSecret;
     private $logger;
-    private $mjClient;
+    private $client;
     private $serializer;
-    private $deliverDisabled;
 
-    public function __construct(MailjetMailSerializer $serializer, LoggerInterface $logger, string $apiKey, string $apiSecret, string $apiVersion, bool $deliverDisabled = false)
-    {
-        $this->apiKey = $apiKey;
-        $this->apiSecret = $apiSecret;
-        $this->logger = $logger;
+    public function __construct(Client $client, MailjetMailSerializer $serializer, LoggerInterface $logger) {
+        $this->client = $client;
         $this->serializer = $serializer;
-        $this->deliverDisabled = $deliverDisabled;
-        $this->mjClient = new Client($apiKey, $apiSecret, true, ['version' => sprintf('v%s', $apiVersion)]);
+        $this->logger = $logger;
     }
 
     public function send(MailjetMail $mail): bool
     {
-        if (!$this->deliverDisabled) {
-            $response = $this->mjClient->post(Resources::$Email, ['body' => $this->serializer->normalize($mail)]);
-            $this->logErrors($response);
-        }
+        $response = $this->client->post(Resources::$Email, ['body' => $this->serializer->normalize($mail)]);
+        $this->logErrors($response);
 
-        return true;
+        return $response->success();
     }
 
-    public function logErrors(Response $response): void
+    private function logErrors(Response $response): void
     {
-        if ($response->getStatus() !== 200) {
+        if (!$response->success()) {
             $error = sprintf(
                 'Unexpected API-Response. Status: %s, Message. %s',
                 $response->getStatus(),
-                json_encode($response->getBody())
+                $response->getReasonPhrase()
             );
             $this->logger->error($error);
 

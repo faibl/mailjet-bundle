@@ -88,7 +88,9 @@ class MailjetMailSerializerTest extends BaseBundleTestCase
     private function getSerializer(): MailjetMailSerializer
     {
         self::bootKernel();
+        $this->createKernel();
         $this->bootKernel();
+
         $container = $this->getContainer();
 
         return $container->get('Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer');
