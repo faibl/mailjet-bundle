@@ -6,5 +6,5 @@ use Faibl\MailjetBundle\Model\MailjetMail;
 
 interface MailjetServiceInterface
 {
-    public function send(MailjetMail $mail): bool;
+    public function send(MailjetMail $mail): ?bool;
 }

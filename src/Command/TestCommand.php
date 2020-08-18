@@ -65,21 +65,27 @@ class TestCommand extends Command
 
         switch ($type) {
             case 'text':
-                $this->sendTestTextMail($receiver, $sender);
+                $success = $this->sendTestTextMail($receiver, $sender);
                 break;
             case 'template':
-                $this->sendTemplateMail($receiver, (int) $templateId);
+                $success = $this->sendTemplateMail($receiver, (int) $templateId);
                 break;
             default:
                 throw new MailjetException(sprintf('Unknown argument type provided. Options are text or template, %s provided', $type));
         }
 
-        $this->io->success('Successfully sent.');
+        if ($success === true) {
+            $this->io->success('E-Mail Successfully sent.');
+        } elseif ($success === false) {
+            $this->io->error('E-Mail could not be sent. Check your logs for more information.');
+        } else {
+            $this->io->text('No E-mail is sent. Dis you disable delivery?');
+        }
 
         return 1;
     }
 
-    private function sendTestTextMail(string $receiver, string $sender): void
+    private function sendTestTextMail(string $receiver, string $sender): bool
     {
         $mail = (new MailjetTextMail())
             ->setSender((new MailjetAddress($sender)))
@@ -87,14 +93,14 @@ class TestCommand extends Command
             ->setSubject('Testmail send by faibl-mailjet-bundle')
             ->setTextPart('Nothing to say...');
 
-        $this->mailjetService->send($mail);
+        return $this->mailjetService->send($mail);
     }
 
-    private function sendTemplateMail(string $receiver, int $templateId): void
+    private function sendTemplateMail(string $receiver, int $templateId): bool
     {
         $mail = (new MailjetTemplateMail($templateId))
             ->addReceiver((new MailjetAddress($receiver)));
 
-        $this->mailjetService->send($mail);
+        return $this->mailjetService->send($mail);
     }
 }

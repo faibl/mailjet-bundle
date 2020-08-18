@@ -22,9 +22,10 @@ class MailjetService implements MailjetServiceInterface
         $this->logger = $logger;
     }
 
-    public function send(MailjetMail $mail): bool
+    public function send(MailjetMail $mail): ?bool
     {
         $response = $this->client->post(Resources::$Email, ['body' => $this->serializer->normalize($mail)]);
+
         $this->logErrors($response);
 
         return $response->success();
@@ -32,7 +33,7 @@ class MailjetService implements MailjetServiceInterface
 
     private function logErrors(Response $response): void
     {
-        if (!$response->success()) {
+        if ($response->success() === false) {
             $error = sprintf(
                 'Unexpected API-Response. Status: %s, Message. %s',
                 $response->getStatus(),
