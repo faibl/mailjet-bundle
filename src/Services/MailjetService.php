@@ -2,7 +2,7 @@
 
 namespace Faibl\MailjetBundle\Services;
 
-use Faibl\MailjetBundle\Exception\MailException;
+use Faibl\MailjetBundle\Exception\MailjetException;
 use Faibl\MailjetBundle\Model\MailjetMail;
 use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Mailjet\Client;
@@ -49,7 +49,7 @@ class MailjetService implements MailjetServiceInterface
             );
             $this->logger->error($error);
 
-            throw new MailException($error);
+            throw new MailjetException($error);
         }
     }
 }

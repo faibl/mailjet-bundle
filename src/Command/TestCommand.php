@@ -2,7 +2,7 @@
 
 namespace Faibl\MailjetBundle\Command;
 
-use Faibl\MailjetBundle\Exception\MailException;
+use Faibl\MailjetBundle\Exception\MailjetException;
 use Faibl\MailjetBundle\Model\MailjetTextMail;
 use Faibl\MailjetBundle\Model\MailjetMail;
 use Faibl\MailjetBundle\Model\MailjetAddress;
@@ -71,7 +71,7 @@ class TestCommand extends Command
                 $this->sendTemplateMail($receiver, (int) $templateId);
                 break;
             default:
-                throw new MailException(sprintf('Unknown argument type provided. Options are text or template, %s provided', $type));
+                throw new MailjetException(sprintf('Unknown argument type provided. Options are text or template, %s provided', $type));
         }
 
         $this->io->success('Successfully sent.');
