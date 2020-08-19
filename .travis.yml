@@ -26,10 +26,12 @@ matrix:
 
       # Test LTS versions. This makes sure we do not use Symfony packages with version greater
       # than 2 or 3 respectively. Read more at https://github.com/symfony/lts
+    - php: 7.1
     - php: 7.2
-      env: DEPENDENCIES="symfony/lts:^4" STABILITY="dev"
+      env: DEPENDENCIES="symfony/lts:^4"
     - php: 7.2
-      env: DEPENDENCIES="symfony/lts:^5" STABILITY="dev"
+    - php: 7.3
+      env: SYMFONY_VERSION='^5'
 
 #      # Latest commit to master
 #    - php: 7.2
