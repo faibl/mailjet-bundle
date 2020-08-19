@@ -16,7 +16,8 @@ class MailjetService implements MailjetServiceInterface
     private $client;
     private $serializer;
 
-    public function __construct(Client $client, MailjetMailSerializer $serializer, LoggerInterface $logger) {
+    public function __construct(Client $client, MailjetMailSerializer $serializer, LoggerInterface $logger)
+    {
         $this->client = $client;
         $this->serializer = $serializer;
         $this->logger = $logger;

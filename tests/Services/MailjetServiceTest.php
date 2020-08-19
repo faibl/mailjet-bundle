@@ -3,52 +3,43 @@
 namespace Faibl\MailjetBundle\Tests\Services;
 
 use Faibl\MailjetBundle\Model\MailjetAddress;
-use Faibl\MailjetBundle\Model\MailjetTemplateMail;
-use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
+use Faibl\MailjetBundle\Model\MailjetTextMail;
 use Faibl\MailjetBundle\Services\MailjetService;
 use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
-use Psr\Log\LoggerInterface;
 
 class MailjetServiceTest extends FaiblMailjetBundleTestCase
 {
-    public function testStandardConfig()
-    {
+//    public function testStandardConfig()
+//    {
 //        $this->bootFaiblMailjetBundleKernel();
+//        $mailjetService = $this->getMailjetService();
+//        $mail = $this->getTextMail();
 //
-//        $mail = (new MailjetTemplateMail(123))
-//            ->addReceiver((new MailjetAddress('receiver@mail.de')));
-//
-//        $mailjetService = $this->getContainer()->get(MailjetService::class);
-//
+//        $this->expectException(MailjetException::class);
 //        $success = $mailjetService->send($mail);
-
-
-
-//        $mock = $this->getMockBuilder(MailjetService::class)
-//            ->disableOriginalConstructor()
-////            ->setConstructorArgs([$this->getService(MailjetMailSerializer::class), $this->getService('logger'), 'key', 'secret', 'v3.1', true])
-//            ->onlyMethods(['sendMail'])
-//            ->getMock();
+//    }
 //
-//        $mock->expects($this->once())
-//            ->method('sendMail')
-//            ->with($this->identicalTo($mail));
-//
-//        $mock->send($mail);
+    public function testDeliveryDisabled()
+    {
+        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../config/delivery_disabled.yaml');
+        $mailjetService = $this->getMailjetService();
+        $mail = $this->getTextMail();
+
+        $success = $mailjetService->send($mail);
+
+        $this->assertSame(null, $success, 'Test');
     }
 
-//    public function testDisabledConfig()
-//    {
-//        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../config/faibl_mailjet.yaml');
-//
-//        $mail = (new MailjetTemplateMail(123))
-//            ->addReceiver((new MailjetAddress('receiver@mail.de')));
-//
-//        $observer = $this->createMock(MailjetService::class);
-//
-//        $observer->send($mail);
-//        $observer->expects($this->once())
-//            ->method('sendMail');
-//
-//    }
+    private function getTextMail(): MailjetTextMail
+    {
+        return (new MailjetTextMail())
+            ->setSender((new MailjetAddress('sender@email.de', 'Sender Send')))
+            ->addReceiver((new MailjetAddress('receiver@email.de', 'Receiver Receive')))
+            ->setTextPart('TEXT');
+    }
+
+    private function getMailjetService(): MailjetService
+    {
+        return $this->getContainer()->get(MailjetService::class);
+    }
  }

@@ -1,4 +1,3 @@
 faibl_mailjet:
   delivery:
     disabled: true
-    address: 'delivery_address@mail.de'
