@@ -25,11 +25,11 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
                     ]],
                     'Cc' => [[
                         'Email' => 'receiver_cc@email.de',
-                        'Name' => 'ReceiverCC Receive',
+                        'Name' => 'ReceiverCc Receive',
                     ]],
-                    'Bc' => [[
-                        'Email' => 'receiver_bc@email.de',
-                        'Name' => 'ReceiverBC Receive',
+                    'Bcc' => [[
+                        'Email' => 'receiver_bcc@email.de',
+                        'Name' => 'ReceiverBcc Receive',
                     ]],
                     "TemplateLanguage" => true,
                     "TemplateID" => 123,
@@ -78,8 +78,8 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
     {
         return (new MailjetTemplateMail(123))
             ->addReceiver((new MailjetAddress('receiver@email.de', 'Receiver Receive')))
-            ->addReceiverCC((new MailjetAddress('receiver_cc@email.de', 'ReceiverCC Receive')))
-            ->addReceiverBC((new MailjetAddress('receiver_bc@email.de', 'ReceiverBC Receive')))
+            ->addReceiverCc((new MailjetAddress('receiver_cc@email.de', 'ReceiverCc Receive')))
+            ->addReceiverBcc((new MailjetAddress('receiver_bcc@email.de', 'ReceiverBcc Receive')))
             ->setVariables(['key1' => 'val1', 'key2' => ['val2.1' => 'key2.1']]);
     }
 

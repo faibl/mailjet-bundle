@@ -5,8 +5,8 @@ namespace Faibl\MailjetBundle\Model;
 class MailjetMail
 {
     private $receiver = [];
-    private $receiverCC = [];
-    private $receiverBC = [];
+    private $receiverCc = [];
+    private $receiverBcc = [];
     private $attachment;
 
     public function addReceiver(MailjetAddress $receiver): self
@@ -21,28 +21,28 @@ class MailjetMail
         return $this->receiver;
     }
 
-    public function addReceiverCC(MailjetAddress $receiver): self
+    public function addReceiverCc(MailjetAddress $receiver): self
     {
-        $this->receiverCC[] = $receiver;
+        $this->receiverCc[] = $receiver;
 
         return $this;
     }
 
-    public function getReceiverCC(): array
+    public function getReceiverCc(): array
     {
-        return $this->receiverCC;
+        return $this->receiverCc;
     }
 
-    public function addReceiverBC(MailjetAddress $receiver): self
+    public function addReceiverBcc(MailjetAddress $receiver): self
     {
-        $this->receiverBC[] = $receiver;
+        $this->receiverBcc[] = $receiver;
 
         return $this;
     }
 
-    public function getReceiverBC(): array
+    public function getReceiverBcc(): array
     {
-        return $this->receiverBC;
+        return $this->receiverBcc;
     }
 
     public function getAttachment(): ?MailjetAttachment

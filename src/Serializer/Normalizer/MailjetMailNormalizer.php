@@ -111,8 +111,8 @@ class MailjetMailNormalizer implements NormalizerInterface
         if (empty($this->deliveryAddress)) {
             return [
                 'To' => $this->normalizeReceivers($mail->getReceiver()),
-                'Cc' => $this->normalizeReceivers($mail->getReceiverCC()),
-                'Bc' => $this->normalizeReceivers($mail->getReceiverBC()),
+                'Cc' => $this->normalizeReceivers($mail->getReceiverCc()),
+                'Bcc' => $this->normalizeReceivers($mail->getReceiverBcc()),
             ];
         }
 
