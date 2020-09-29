@@ -9,16 +9,6 @@ use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 
 class MailjetServiceTest extends FaiblMailjetBundleTestCase
 {
-//    public function testStandardConfig()
-//    {
-//        $this->bootFaiblMailjetBundleKernel();
-//        $mailjetService = $this->getMailjetService();
-//        $mail = $this->getTextMail();
-//
-//        $this->expectException(MailjetException::class);
-//        $success = $mailjetService->send($mail);
-//    }
-//
     public function testDeliveryDisabled()
     {
         $this->bootFaiblMailjetBundleKernel(__DIR__.'/../config/delivery_disabled.yaml');

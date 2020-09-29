@@ -30,7 +30,8 @@ class MailjetMailNormalizer implements NormalizerInterface
 
         $messages = array_merge(
             $this->normalizeMessageBase($object),
-            $this->normalizeMessageContent($object, $context)
+            $this->normalizeMessageContent($object, $context),
+            $this->normalizeSandboxMode($object)
         );
 
         return [
@@ -61,16 +62,6 @@ class MailjetMailNormalizer implements NormalizerInterface
         return $messages;
     }
 
-    private function normalizeBasicMail(MailjetTextMail $mail, array $context = []): array
-    {
-        $mail =  array_merge(
-            $this->normalizeMessageBase($mail),
-            $this->normalizeBasicMailContent($mail)
-        );
-
-        return ArrayUtil::filterEmptyRecursive($mail);
-    }
-
     private function normalizeBasicMailContent(MailjetTextMail $mail, array $context = []): array
     {
         return [
@@ -93,17 +84,14 @@ class MailjetMailNormalizer implements NormalizerInterface
 
     private function normalizeTemplateMailContent(MailjetTemplateMail $mail, array $context = []): array
     {
-        return array_merge(
-            $this->normalizeMessageBase($mail),
-            [
-                'TemplateLanguage' => true,
-                'TemplateID' => $mail->getTemplateId(),
-                'Variables' => $mail->getVariables(),
-                "TemplateErrorReporting" => [
-                    "Email" => $this->receiverErrors,
-                ],
-            ]
-        );
+        return [
+            'TemplateLanguage' => true,
+            'TemplateID' => $mail->getTemplateId(),
+            'Variables' => $mail->getVariables(),
+            "TemplateErrorReporting" => [
+                "Email" => $this->receiverErrors,
+            ],
+        ];
     }
 
     private function normalizeMessageBase(MailjetMail $mail): array
@@ -119,6 +107,11 @@ class MailjetMailNormalizer implements NormalizerInterface
         return [
             'To' => [$this->normalizeReceiver(new MailjetAddress($this->deliveryAddress))],
         ];
+    }
+
+    private function normalizeSandboxMode(MailjetMail $mail): array
+    {
+        return $mail->isSandboxMode() ? ['SandboxMode' => true] : [];
     }
 
     private function normalizeReceivers(array $receivers): array

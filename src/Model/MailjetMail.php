@@ -7,11 +7,21 @@ class MailjetMail
     private $receiver = [];
     private $receiverCc = [];
     private $receiverBcc = [];
-    private $attachment;
+    private $attachment = null;
+    private $sandboxMode = false;
 
     public function addReceiver(MailjetAddress $receiver): self
     {
         $this->receiver[] = $receiver;
+
+        return $this;
+    }
+
+    public function addReceivers(MailjetAddressCollection $receiverCollection): self
+    {
+        foreach ($receiverCollection->getAddresses() as $receiver) {
+            $this->addReceiver($receiver);
+        }
 
         return $this;
     }
@@ -28,6 +38,15 @@ class MailjetMail
         return $this;
     }
 
+    public function addReceiversCc(MailjetAddressCollection $receiverCollection): self
+    {
+        foreach ($receiverCollection->getAddresses() as $receiver) {
+            $this->addReceiverCc($receiver);
+        }
+
+        return $this;
+    }
+
     public function getReceiverCc(): array
     {
         return $this->receiverCc;
@@ -36,6 +55,15 @@ class MailjetMail
     public function addReceiverBcc(MailjetAddress $receiver): self
     {
         $this->receiverBcc[] = $receiver;
+
+        return $this;
+    }
+
+    public function addReceiversBcc(MailjetAddressCollection $receiverCollection): self
+    {
+        foreach ($receiverCollection->getAddresses() as $receiver) {
+            $this->addReceiverBcc($receiver);
+        }
 
         return $this;
     }
@@ -53,6 +81,18 @@ class MailjetMail
     public function setAttachment(MailjetAttachment $attachment): self
     {
         $this->attachment = $attachment;
+
+        return $this;
+    }
+
+    public function isSandboxMode(): bool
+    {
+        return $this->sandboxMode;
+    }
+
+    public function setSandboxMode(bool $sandboxMode): self
+    {
+        $this->sandboxMode = $sandboxMode;
 
         return $this;
     }

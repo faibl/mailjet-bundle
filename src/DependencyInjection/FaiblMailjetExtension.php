@@ -18,10 +18,6 @@ class FaiblMailjetExtension extends ConfigurableExtension
 
         $definition = $container->getDefinition('Faibl\MailjetBundle\Services\MailjetService');
         $definition->setArgument(2, new Reference($config['logger']));
-//        $definition->setArgument(2, $config['api']['key']);
-//        $definition->setArgument(3, $config['api']['secret']);
-//        $definition->setArgument(4, $config['api']['version']);
-//        $definition->setArgument(5, $config['delivery']['disabled']);
 
         $definition = $container->getDefinition('Faibl\MailjetBundle\Serializer\Normalizer\MailjetMailNormalizer');
         $definition->setArgument(0, $config['error']['receiver']);
