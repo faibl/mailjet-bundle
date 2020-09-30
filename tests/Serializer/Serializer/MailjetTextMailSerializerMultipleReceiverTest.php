@@ -25,11 +25,9 @@ class MailjetTextMailSerializerMultipleReceiverTest extends FaiblMailjetBundleTe
                     'To' => [
                         [
                             'Email' => 'receiver1@email.de',
-                            'Name' => 'Receiver1 Receive',
                         ],
                         [
                             'Email' => 'receiver2@email.de',
-                            'Name' => 'Receiver2 Receive',
                         ]
                     ],
                     'Cc' => [
@@ -72,18 +70,15 @@ class MailjetTextMailSerializerMultipleReceiverTest extends FaiblMailjetBundleTe
     {
         return (new MailjetTextMail())
             ->setSender((new MailjetAddress('sender@email.de', 'Sender Send')))
-            ->addReceivers((new MailjetAddressCollection([
-                ['receiver1@email.de', 'Receiver1 Receive'],
-                ['receiver2@email.de', 'Receiver2 Receive'],
-            ])))
-            ->addReceiversCc((new MailjetAddressCollection([
-                ['receiver_cc1@email.de'],
-                ['receiver_cc2@email.de'],
-            ])))
-            ->addReceiversBcc((new MailjetAddressCollection([
-                ['receiver_bcc1@email.de'],
-                ['receiver_bcc2@email.de'],
-            ])))
+            ->addReceivers(
+                new MailjetAddressCollection(['receiver1@email.de','receiver2@email.de'])
+            )
+            ->addReceiversCc(
+                new MailjetAddressCollection(['receiver_cc1@email.de','receiver_cc2@email.de'])
+            )
+            ->addReceiversBcc(
+                new MailjetAddressCollection(['receiver_bcc1@email.de','receiver_bcc2@email.de'])
+            )
             ->setTextPart('TEXT')
             ->setHtmlPart('<p>HTML</p>')
             ->setAttachment((new MailjetAttachment())
