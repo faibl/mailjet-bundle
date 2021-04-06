@@ -13,10 +13,10 @@ class MailjetTextMailSerializerSandboxModeTest extends FaiblMailjetBundleTestCas
     public function testTextMail()
     {
         $this->bootFaiblMailjetBundleKernel();
-        $mailjetMailNormalizer = $this->getSerializer();
+        $serializer = $this->getContainer()->get(MailjetMailSerializer::class);
         $mail = $this->getTextMail();
 
-        $mailNormalized = $mailjetMailNormalizer->normalize($mail);
+        $mailNormalized = $serializer->normalize($mail);
 
         $expected =  [
             "Messages" => [
@@ -47,10 +47,5 @@ class MailjetTextMailSerializerSandboxModeTest extends FaiblMailjetBundleTestCas
             ->setTextPart('TEXT')
             ->setHtmlPart('<p>HTML</p>')
             ->setSandboxMode(true);
-    }
-
-    private function getSerializer(): MailjetMailSerializer
-    {
-        return $this->getContainer()->get(MailjetMailSerializer::class);
     }
 }

@@ -1,0 +1,11 @@
+faibl_mailjet:
+  accounts:
+    account_1:
+      api:
+        key: mailjet_key_1
+        secret: mailjet_secret_1
+    account_2:
+      api:
+        key: mailjet_key_2
+        secret: mailjet_secret_2
+  default_account: account_2

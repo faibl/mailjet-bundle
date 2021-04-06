@@ -14,10 +14,10 @@ class MailjetTextMailSerializerMultipleReceiverTest extends FaiblMailjetBundleTe
     public function testTextMailMultipleReceiver()
     {
         $this->bootFaiblMailjetBundleKernel();
-        $mailjetMailNormalizer = $this->getSerializer();
+        $serializer = $this->getContainer()->get(MailjetMailSerializer::class);
         $mail = $this->getTextMailMultipleReceiver();
 
-        $mailNormalized = $mailjetMailNormalizer->normalize($mail);
+        $mailNormalized = $serializer->normalize($mail);
 
         $expected =  [
             "Messages" => [
@@ -86,10 +86,5 @@ class MailjetTextMailSerializerMultipleReceiverTest extends FaiblMailjetBundleTe
                 ->setContentType('text/plain')
                 ->setFilename('content.txt')
             );
-    }
-
-    private function getSerializer(): MailjetMailSerializer
-    {
-        return $this->getContainer()->get(MailjetMailSerializer::class);
     }
 }

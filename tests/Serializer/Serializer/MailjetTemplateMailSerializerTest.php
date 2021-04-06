@@ -12,9 +12,9 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
     public function testTemplateMail()
     {
         $this->bootFaiblMailjetBundleKernel();
-        $mailjetMailNormalizer = $this->getSerializer();
+        $serializer = $this->getContainer()->get(MailjetMailSerializer::class);
         $mail = $this->getTemplateMail();
-        $mailNormalized = $mailjetMailNormalizer->normalize($mail);
+        $mailNormalized = $serializer->normalize($mail);
 
         $expected =  [
             "Messages" => [
@@ -49,9 +49,9 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
     public function testTextMailToDeliveryAddress()
     {
         $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/delivery_address.yaml');
-        $mailjetMailNormalizer = $this->getSerializer();
+        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTemplateMail();
-        $mailNormalized = $mailjetMailNormalizer->normalize($mail);
+        $mailNormalized = $serializer->normalize($mail);
 
         $expected =  [
             "Messages" => [
@@ -82,10 +82,4 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
             ->addReceiverBcc((new MailjetAddress('receiver_bcc@email.de', 'ReceiverBcc Receive')))
             ->setVariables(['key1' => 'val1', 'key2' => ['val2.1' => 'key2.1']]);
     }
-
-    private function getSerializer(): MailjetMailSerializer
-    {
-        return $this->getContainer()->get(MailjetMailSerializer::class);
-    }
-
 }

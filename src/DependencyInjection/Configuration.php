@@ -13,42 +13,26 @@ class Configuration implements ConfigurationInterface
 
         $treeBuilder->getRootNode()
             ->children()
-                ->arrayNode('api')
-                    ->children()
-                        ->scalarNode('version')
-                            ->defaultValue('3.1')
-                        ->end()
-                        ->scalarNode('key')
-                            ->isRequired()
-                            ->cannotBeEmpty()
-                        ->end()
-                        ->scalarNode('secret')
-                            ->isRequired()
-                            ->cannotBeEmpty()
-                        ->end()
-                    ->end()
-                ->end() // api
-                ->scalarNode('logger')
-                    ->defaultValue('logger')
-                ->end() // logger
-                ->arrayNode('delivery')
-                    ->children()
-                        ->scalarNode('disabled')
-                            ->defaultFalse()
-                        ->end()
-                        ->scalarNode('address')
-                            ->defaultNull()
+                ->arrayNode('accounts')
+                    ->useAttributeAsKey('name')
+                    ->arrayPrototype()
+                        ->children()
+                            ->arrayNode('api')
+                                ->children()
+                                    ->scalarNode('version')->defaultValue('3.1')->end()
+                                    ->scalarNode('key')->isRequired()->cannotBeEmpty()->end()
+                                    ->scalarNode('secret')->isRequired()->cannotBeEmpty()->end()
+                                ->end()
+                            ->end() // api
+                            ->scalarNode('logger')->defaultValue('logger')->end()
+                            ->scalarNode('delivery_disabled')->defaultFalse()->end()
+                            ->scalarNode('delivery_address')->defaultNull()->end()
+                            ->scalarNode('receiver_errors')->defaultNull()->end()
                         ->end()
                     ->end()
-                ->end() // delivery
-                ->arrayNode('error')
-                    ->children()
-                        ->scalarNode('receiver')
-                        ->isRequired()
-                        ->cannotBeEmpty()
-                    ->end()
-                ->end() // error
-            ->end();
+                ->end()
+                ->scalarNode('default_account')->defaultNull()->end()
+        ;
 
         return $treeBuilder;
     }
