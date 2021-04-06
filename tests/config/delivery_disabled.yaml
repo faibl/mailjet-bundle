@@ -1,3 +1,7 @@
 faibl_mailjet:
-  delivery:
-    disabled: true
+  accounts:
+    account_1:
+      api:
+        key: mailjet_key
+        secret: mailjet_secret
+      delivery_disabled: true

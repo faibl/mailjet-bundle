@@ -13,10 +13,10 @@ class MailjetTextMailSerializerTest extends FaiblMailjetBundleTestCase
     public function testTextMail()
     {
         $this->bootFaiblMailjetBundleKernel();
-        $mailjetMailNormalizer = $this->getSerializer();
+        $serializer = $this->getContainer()->get(MailjetMailSerializer::class);
         $mail = $this->getTextMail();
 
-        $mailNormalized = $mailjetMailNormalizer->normalize($mail);
+        $mailNormalized = $serializer->normalize($mail);
 
         $expected =  [
             "Messages" => [
@@ -56,10 +56,10 @@ class MailjetTextMailSerializerTest extends FaiblMailjetBundleTestCase
     public function testTextMailToDeliveryAddress()
     {
         $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/delivery_address.yaml');
-        $mailjetMailNormalizer = $this->getSerializer();
+        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTextMail();
 
-        $mailNormalized = $mailjetMailNormalizer->normalize($mail);
+        $mailNormalized = $serializer->normalize($mail);
 
         $expected =  [
             "Messages" => [
@@ -101,10 +101,5 @@ class MailjetTextMailSerializerTest extends FaiblMailjetBundleTestCase
                 ->setContentType('text/plain')
                 ->setFilename('content.txt')
             );
-    }
-
-    private function getSerializer(): MailjetMailSerializer
-    {
-        return $this->getContainer()->get(MailjetMailSerializer::class);
     }
 }

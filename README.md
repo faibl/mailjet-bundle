@@ -6,3 +6,7 @@ Install the package with:
 composer require faibl/mailjet-bundle
 ```
 
+Run Tests
+```console
+php vendor/bin/simple-phpunit
+```

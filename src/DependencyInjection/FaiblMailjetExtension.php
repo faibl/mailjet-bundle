@@ -2,12 +2,17 @@
 
 namespace Faibl\MailjetBundle\DependencyInjection;
 
+use Faibl\MailjetBundle\Serializer\Normalizer\MailjetMailNormalizer;
+use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
+use Faibl\MailjetBundle\Services\MailjetService;
+use Mailjet\Client;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class FaiblMailjetExtension extends ConfigurableExtension
 {
@@ -16,17 +21,83 @@ class FaiblMailjetExtension extends ConfigurableExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        $definition = $container->getDefinition('Faibl\MailjetBundle\Services\MailjetService');
-        $definition->setArgument(2, new Reference($config['logger']));
+        $default = $this->getDefaultAccountConfig($config);
+        if ($default) {
+            $this->registerDefaultService($container, $default);
+        }
 
-        $definition = $container->getDefinition('Faibl\MailjetBundle\Serializer\Normalizer\MailjetMailNormalizer');
-        $definition->setArgument(0, $config['error']['receiver']);
-        $definition->setArgument(1, $config['delivery']['address']);
+        foreach ($config['accounts'] as $name => $account) {
+            $this->registerAccountAliases($container, $name, $account);
+        }
+    }
 
-        $definition = $container->getDefinition('Mailjet\Client');
-        $definition->setArgument(0, $config['api']['key']);
-        $definition->setArgument(1, $config['api']['secret']);
-        $definition->setArgument(2, !$config['delivery']['disabled']);
-        $definition->setArgument(3, ['version' => sprintf('v%s', $config['api']['version'])]);
+    private function getDefaultAccountConfig(array $config): ?array
+    {
+        $accounts = $config['accounts'];
+        $defaultAccount = $config['default_account'];
+
+        if (empty($accounts)) {
+            return null;
+        }
+
+        if ($defaultAccount) {
+            if (!isset($accounts[$defaultAccount]) || !is_array($accounts[$defaultAccount])) {
+                throw new InvalidConfigurationException(sprintf('Default Account %s is not configured under accounts', $defaultAccount));
+            }
+            // return specifically defined default
+            return $accounts[$defaultAccount];
+        }
+        // return first defined account
+        return current($config['accounts']);
+    }
+
+    public function registerAccountAliases(ContainerBuilder $container, string $name, array $config)
+    {
+        $clientId = sprintf('fbl_mailjet.client.%s', $name);
+        $client = (new Definition(Client::class))
+            ->setArgument(0, $config['api']['key'])
+            ->setArgument(1, $config['api']['secret'])
+            ->setArgument(2, !$config['delivery_disabled'])
+            ->setArgument(3, ['version' => sprintf('v%s', $config['api']['version'])])
+            ->setPublic(true);
+        $container->setDefinition($clientId, $client);
+
+        $normalizerId = sprintf('fbl_mailjet.normalizer.%s', $name);
+        $normalizer = (new Definition(MailjetMailNormalizer::class))
+            ->setArgument(0, $config['receiver_errors'])
+            ->setArgument(1, $config['delivery_address'])
+            ->setPublic(true);
+        $container->setDefinition($normalizerId, $normalizer);
+
+        $serializerId = sprintf('fbl_mailjet.serializer.%s', $name);
+        $serializer = (new Definition(MailjetMailSerializer::class))
+            ->setArgument(0, new Reference($normalizerId))
+            ->setArgument(1, new Reference('serializer.encoder.json'))
+            ->setPublic(true);
+        $container->setDefinition($serializerId, $serializer);
+
+        $serviceId = sprintf('fbl_mailjet.service.%s', $name);
+        $service = (new Definition(MailjetService::class))
+            ->setArgument(0, new Reference($clientId))
+            ->setArgument(1, new Reference($serializerId))
+            ->setArgument(2, new Reference($config['logger']))
+            ->setPublic(true);
+        $container->setDefinition($serviceId, $service);
+    }
+
+    public function registerDefaultService(ContainerBuilder $container, array $config)
+    {
+        $container->getDefinition(Client::class)
+            ->setArgument(0, $config['api']['key'])
+            ->setArgument(1, $config['api']['secret'])
+            ->setArgument(2, !$config['delivery_disabled'])
+            ->setArgument(3, ['version' => sprintf('v%s', $config['api']['version'])]);
+
+        $container->getDefinition(MailjetMailNormalizer::class)
+            ->setArgument(0, $config['receiver_errors'])
+            ->setArgument(1, $config['delivery_address']);
+
+        $container->getDefinition(MailjetService::class)
+            ->setArgument(2, new Reference($config['logger']));
     }
 }
