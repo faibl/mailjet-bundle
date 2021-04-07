@@ -6,11 +6,11 @@
 
     <services>
         <service id="Faibl\MailjetBundle\Command\TestCommand" public="false">
-            <argument type="service" id="Faibl\MailjetBundle\Services\MailjetServiceFactory"/>
+            <argument type="service" id="Faibl\MailjetBundle\Services\MailjetServiceLocator"/>
             <tag name="console.command" />
         </service>
 
-        <service id="Faibl\MailjetBundle\Services\MailjetServiceFactory" public="false">
+        <service id="Faibl\MailjetBundle\Services\MailjetServiceLocator" public="false">
         </service>
     </services>
 </container>

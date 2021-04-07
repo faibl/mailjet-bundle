@@ -4,7 +4,7 @@ namespace Faibl\MailjetBundle\Services;
 
 use Faibl\MailjetBundle\Model\MailjetMail;
 
-class MailjetServiceFactory
+class MailjetServiceLocator
 {
     private $services = [];
 

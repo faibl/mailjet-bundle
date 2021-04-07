@@ -6,7 +6,7 @@ use Cassandra\Map;
 use Faibl\MailjetBundle\Serializer\Normalizer\MailjetMailNormalizer;
 use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Faibl\MailjetBundle\Services\MailjetService;
-use Faibl\MailjetBundle\Services\MailjetServiceFactory;
+use Faibl\MailjetBundle\Services\MailjetServiceLocator;
 use Mailjet\Client;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
@@ -61,7 +61,7 @@ class FaiblMailjetExtension extends ConfigurableExtension
             ->setPublic(true);
         $container->setDefinition($serviceId, $service);
 
-        $container->getDefinition(MailjetServiceFactory::class)
+        $container->getDefinition(MailjetServiceLocator::class)
             ->addMethodCall('addService', [$name, new Reference($serviceId)]);
     }
 }

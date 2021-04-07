@@ -6,7 +6,7 @@ use Faibl\MailjetBundle\Exception\MailjetException;
 use Faibl\MailjetBundle\Model\MailjetTextMail;
 use Faibl\MailjetBundle\Model\MailjetAddress;
 use Faibl\MailjetBundle\Model\MailjetTemplateMail;
-use Faibl\MailjetBundle\Services\MailjetServiceFactory;
+use Faibl\MailjetBundle\Services\MailjetServiceLocator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,7 +21,7 @@ class TestCommand extends Command
     private $io;
     private $mailjetService;
 
-    public function __construct(MailjetServiceFactory $mailjetService)
+    public function __construct(MailjetServiceLocator $mailjetService)
     {
         $this->mailjetService = $mailjetService;
         parent::__construct($this::$defaultName);

@@ -4,16 +4,16 @@ namespace Faibl\MailjetBundle\Tests\Services;
 
 use Faibl\MailjetBundle\Model\MailjetTextMail;
 use Faibl\MailjetBundle\Services\MailjetService;
-use Faibl\MailjetBundle\Services\MailjetServiceFactory;
+use Faibl\MailjetBundle\Services\MailjetServiceLocator;
 use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 
-class MailjetServiceFactoryTest extends FaiblMailjetBundleTestCase
+class MailjetServiceLocatorTest extends FaiblMailjetBundleTestCase
 {
     public function test_service_getter()
     {
         $this->bootFaiblMailjetBundleKernel(__DIR__ . '/../config/multiple_accounts.yaml');
-        /** @var MailjetServiceFactory $mailjetServiceFactory */
-        $mailjetServiceFactory = $this->getContainer()->get(MailjetServiceFactory::class);
+        /** @var MailjetServiceLocator $mailjetServiceFactory */
+        $mailjetServiceFactory = $this->getContainer()->get(MailjetServiceLocator::class);
 
         $mailjetService1_1 = $mailjetServiceFactory->getService('account_1');
         $mailjetService1_2 = $this->getContainer()->get('fbl_mailjet.service.account_1');
@@ -33,8 +33,8 @@ class MailjetServiceFactoryTest extends FaiblMailjetBundleTestCase
     public function test_unknown_service()
     {
         $this->bootFaiblMailjetBundleKernel(__DIR__ . '/../config/multiple_accounts.yaml');
-        /** @var MailjetServiceFactory $mailjetServiceFactory */
-        $mailjetServiceFactory = $this->getContainer()->get(MailjetServiceFactory::class);
+        /** @var MailjetServiceLocator $mailjetServiceFactory */
+        $mailjetServiceFactory = $this->getContainer()->get(MailjetServiceLocator::class);
 
         $unknownService = $mailjetServiceFactory->getService('account_3');
         $this->assertEquals(null, $unknownService);
