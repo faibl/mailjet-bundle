@@ -6,15 +6,14 @@ use Faibl\MailjetBundle\Model\MailjetAddressCollection;
 use Faibl\MailjetBundle\Model\MailjetAttachment;
 use Faibl\MailjetBundle\Model\MailjetTextMail;
 use Faibl\MailjetBundle\Model\MailjetAddress;
-use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 
 class MailjetTextMailSerializerMultipleReceiverTest extends FaiblMailjetBundleTestCase
 {
-    public function testTextMailMultipleReceiver()
+    public function test_text_mail_multiple_receiver()
     {
-        $this->bootFaiblMailjetBundleKernel();
-        $serializer = $this->getContainer()->get(MailjetMailSerializer::class);
+        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/default.yaml');
+        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTextMailMultipleReceiver();
 
         $mailNormalized = $serializer->normalize($mail);

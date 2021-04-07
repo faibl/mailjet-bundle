@@ -8,4 +8,3 @@ faibl_mailjet:
       api:
         key: mailjet_key_2
         secret: mailjet_secret_2
-  default_account: account_2

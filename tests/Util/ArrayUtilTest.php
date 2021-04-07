@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class ArrayUtilTest extends TestCase
 {
-    public function testFilterEmpty()
+    public function test_filter_empty()
     {
         $array = [
             0 => 0,
@@ -29,7 +29,7 @@ class ArrayUtilTest extends TestCase
         $this->assertEquals($expected, ArrayUtil::filterEmpty($array), 'Test filter empty values from array');
     }
 
-    public function testFilterEmptyRecursive()
+    public function test_filter_empty_recursive()
     {
         $array = [
             0 => 0,

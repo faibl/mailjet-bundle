@@ -2,9 +2,11 @@
 
 namespace Faibl\MailjetBundle\DependencyInjection;
 
+use Cassandra\Map;
 use Faibl\MailjetBundle\Serializer\Normalizer\MailjetMailNormalizer;
 use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Faibl\MailjetBundle\Services\MailjetService;
+use Faibl\MailjetBundle\Services\MailjetServiceFactory;
 use Mailjet\Client;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
@@ -21,37 +23,12 @@ class FaiblMailjetExtension extends ConfigurableExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        $default = $this->getDefaultAccountConfig($config);
-        if ($default) {
-            $this->registerDefaultService($container, $default);
-        }
-
         foreach ($config['accounts'] as $name => $account) {
-            $this->registerAccountAliases($container, $name, $account);
+            $this->registerServices($container, $name, $account);
         }
     }
 
-    private function getDefaultAccountConfig(array $config): ?array
-    {
-        $accounts = $config['accounts'];
-        $defaultAccount = $config['default_account'];
-
-        if (empty($accounts)) {
-            return null;
-        }
-
-        if ($defaultAccount) {
-            if (!isset($accounts[$defaultAccount]) || !is_array($accounts[$defaultAccount])) {
-                throw new InvalidConfigurationException(sprintf('Default Account %s is not configured under accounts', $defaultAccount));
-            }
-            // return specifically defined default
-            return $accounts[$defaultAccount];
-        }
-        // return first defined account
-        return current($config['accounts']);
-    }
-
-    public function registerAccountAliases(ContainerBuilder $container, string $name, array $config)
+    public function registerServices(ContainerBuilder $container, string $name, array $config): void
     {
         $clientId = sprintf('fbl_mailjet.client.%s', $name);
         $client = (new Definition(Client::class))
@@ -83,21 +60,8 @@ class FaiblMailjetExtension extends ConfigurableExtension
             ->setArgument(2, new Reference($config['logger']))
             ->setPublic(true);
         $container->setDefinition($serviceId, $service);
-    }
 
-    public function registerDefaultService(ContainerBuilder $container, array $config)
-    {
-        $container->getDefinition(Client::class)
-            ->setArgument(0, $config['api']['key'])
-            ->setArgument(1, $config['api']['secret'])
-            ->setArgument(2, !$config['delivery_disabled'])
-            ->setArgument(3, ['version' => sprintf('v%s', $config['api']['version'])]);
-
-        $container->getDefinition(MailjetMailNormalizer::class)
-            ->setArgument(0, $config['receiver_errors'])
-            ->setArgument(1, $config['delivery_address']);
-
-        $container->getDefinition(MailjetService::class)
-            ->setArgument(2, new Reference($config['logger']));
+        $container->getDefinition(MailjetServiceFactory::class)
+            ->addMethodCall('addService', [$name, new Reference($serviceId)]);
     }
 }

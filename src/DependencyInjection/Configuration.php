@@ -31,7 +31,6 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-                ->scalarNode('default_account')->defaultNull()->end()
         ;
 
         return $treeBuilder;

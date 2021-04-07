@@ -10,7 +10,7 @@ use Mailjet\Resources;
 use Mailjet\Response;
 use Psr\Log\LoggerInterface;
 
-class MailjetService implements MailjetServiceInterface
+class MailjetService
 {
     private $logger;
     private $client;

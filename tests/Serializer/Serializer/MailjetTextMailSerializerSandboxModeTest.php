@@ -2,18 +2,16 @@
 
 namespace Faibl\MailjetBundle\Tests\Serializer\Serializer;
 
-use Faibl\MailjetBundle\Model\MailjetAttachment;
 use Faibl\MailjetBundle\Model\MailjetTextMail;
 use Faibl\MailjetBundle\Model\MailjetAddress;
-use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 
 class MailjetTextMailSerializerSandboxModeTest extends FaiblMailjetBundleTestCase
 {
-    public function testTextMail()
+    public function test_text_mail()
     {
-        $this->bootFaiblMailjetBundleKernel();
-        $serializer = $this->getContainer()->get(MailjetMailSerializer::class);
+        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/default.yaml');
+        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTextMail();
 
         $mailNormalized = $serializer->normalize($mail);

@@ -4,15 +4,14 @@ namespace Faibl\MailjetBundle\Tests\Serializer\Serializer;
 
 use Faibl\MailjetBundle\Model\MailjetAddress;
 use Faibl\MailjetBundle\Model\MailjetTemplateMail;
-use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 
 class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
 {
-    public function testTemplateMail()
+    public function test_template_mail()
     {
-        $this->bootFaiblMailjetBundleKernel();
-        $serializer = $this->getContainer()->get(MailjetMailSerializer::class);
+        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/default.yaml');
+        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTemplateMail();
         $mailNormalized = $serializer->normalize($mail);
 
@@ -46,7 +45,7 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
         $this->assertEquals($expected, $mailNormalized, 'Normalize Template-Mail.');
     }
 
-    public function testTextMailToDeliveryAddress()
+    public function test_text_mail_to_delivery_address()
     {
         $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/delivery_address.yaml');
         $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');

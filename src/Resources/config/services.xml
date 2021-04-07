@@ -6,24 +6,11 @@
 
     <services>
         <service id="Faibl\MailjetBundle\Command\TestCommand" public="false">
-            <argument type="service" id="Faibl\MailjetBundle\Services\MailjetService"/>
+            <argument type="service" id="Faibl\MailjetBundle\Services\MailjetServiceFactory"/>
             <tag name="console.command" />
         </service>
 
-        <service id="Faibl\MailjetBundle\Services\MailjetService" public="false">
-            <argument type="service" id="Mailjet\Client"/>
-            <argument type="service" id="Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer"/>
-        </service>
-
-        <service id="Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer" public="false">
-            <argument type="service" id="Faibl\MailjetBundle\Serializer\Normalizer\MailjetMailNormalizer"/>
-            <argument type="service" id="serializer.encoder.json"/>
-        </service>
-
-        <service id="Faibl\MailjetBundle\Serializer\Normalizer\MailjetMailNormalizer" public="false">
-        </service>
-
-        <service id="Mailjet\Client" public="false">
+        <service id="Faibl\MailjetBundle\Services\MailjetServiceFactory" public="false">
         </service>
     </services>
 </container>

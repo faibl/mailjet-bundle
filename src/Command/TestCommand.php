@@ -6,7 +6,7 @@ use Faibl\MailjetBundle\Exception\MailjetException;
 use Faibl\MailjetBundle\Model\MailjetTextMail;
 use Faibl\MailjetBundle\Model\MailjetAddress;
 use Faibl\MailjetBundle\Model\MailjetTemplateMail;
-use Faibl\MailjetBundle\Services\MailjetService;
+use Faibl\MailjetBundle\Services\MailjetServiceFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,7 +21,7 @@ class TestCommand extends Command
     private $io;
     private $mailjetService;
 
-    public function __construct(MailjetService $mailjetService)
+    public function __construct(MailjetServiceFactory $mailjetService)
     {
         $this->mailjetService = $mailjetService;
         parent::__construct($this::$defaultName);
@@ -31,6 +31,7 @@ class TestCommand extends Command
     {
         $this
             ->setDescription('Sends testmail through MailJet')
+            ->addArgument('account', InputArgument::REQUIRED, 'Account to send by')
             ->addArgument('type', InputArgument::OPTIONAL, 'Type of mail. Options are text or template', 'text')
             ->addOption('receiver', null, InputOption::VALUE_REQUIRED, 'Email address of receiver', null)
             ->addOption('sender', null, InputOption::VALUE_REQUIRED, 'Email address of sender', null)
@@ -42,6 +43,7 @@ class TestCommand extends Command
     {
         $this->io = new SymfonyStyle($input, $output);
 
+        $account = $input->getArgument('account');
         $type = $input->getArgument('type');
         $receiver = $input->getOption('receiver');
         $sender = $input->getOption('sender');
@@ -63,10 +65,10 @@ class TestCommand extends Command
 
         switch ($type) {
             case 'text':
-                $success = $this->sendTestTextMail($receiver, $sender);
+                $success = $this->sendTestTextMail($account, $receiver, $sender);
                 break;
             case 'template':
-                $success = $this->sendTemplateMail($receiver, (int) $templateId);
+                $success = $this->sendTemplateMail($account, $receiver, (int) $templateId);
                 break;
             default:
                 throw new MailjetException(sprintf('Unknown argument type provided. Options are text or template, %s provided', $type));
@@ -83,7 +85,7 @@ class TestCommand extends Command
         return 1;
     }
 
-    private function sendTestTextMail(string $receiver, string $sender): ?bool
+    private function sendTestTextMail(string $account, string $receiver, string $sender): ?bool
     {
         $mail = (new MailjetTextMail())
             ->setSender((new MailjetAddress($sender)))
@@ -91,14 +93,14 @@ class TestCommand extends Command
             ->setSubject('Testmail send by faibl-mailjet-bundle')
             ->setTextPart('Nothing to say...');
 
-        return $this->mailjetService->send($mail);
+        return $this->mailjetService->send($account, $mail);
     }
 
-    private function sendTemplateMail(string $receiver, int $templateId): ?bool
+    private function sendTemplateMail(string $account, string $receiver, int $templateId): ?bool
     {
         $mail = (new MailjetTemplateMail($templateId))
             ->addReceiver((new MailjetAddress($receiver)));
 
-        return $this->mailjetService->send($mail);
+        return $this->mailjetService->send($account, $mail);
     }
 }
