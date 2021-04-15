@@ -23,9 +23,20 @@ class FaiblMailjetExtension extends ConfigurableExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        foreach ($config['accounts'] as $name => $account) {
-            $this->registerServices($container, $name, $account);
+        foreach ($config['accounts'] as $name => $accountConfig) {
+            $this->registerServices(
+                $container,
+                $name,
+                $this->mergeAccountAndGlobalConfig($accountConfig, $config)
+            );
         }
+    }
+
+    private function mergeAccountAndGlobalConfig(array $accountConfig, array $config): array
+    {
+        unset($config['accounts']);
+        // override global with account-config
+        return array_merge($config, $accountConfig);
     }
 
     public function registerServices(ContainerBuilder $container, string $name, array $config): void
@@ -34,7 +45,7 @@ class FaiblMailjetExtension extends ConfigurableExtension
         $client = (new Definition(Client::class))
             ->setArgument(0, $config['api']['key'])
             ->setArgument(1, $config['api']['secret'])
-            ->setArgument(2, !$config['delivery_disabled'])
+            ->setArgument(2, !$config['delivery_disabled']) // this prevents api to call mailjet
             ->setArgument(3, ['version' => sprintf('v%s', $config['api']['version'])])
             ->setPublic(true);
         $container->setDefinition($clientId, $client);

@@ -19,6 +19,17 @@ class MailjetServiceTest extends FaiblMailjetBundleTestCase
         $this->assertSame(null, $success, 'Test');
     }
 
+    public function test_delivery_disabled_by_default()
+    {
+        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../config/delivery_disabled_by_default.yaml');
+        $mailjetService = $this->getContainer()->get('fbl_mailjet.service.account_1');
+        $mail = $this->getTextMail();
+
+        $success = $mailjetService->send($mail);
+
+        $this->assertSame(null, $success, 'Test');
+    }
+
     private function getTextMail(): MailjetTextMail
     {
         return (new MailjetTextMail())

@@ -73,6 +73,34 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
         $this->assertEquals($expected, $mailNormalized, 'Delivery Address defined in config overrides all recipients.');
     }
 
+    public function test_text_mail_to_delivery_address_by_default()
+    {
+        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/delivery_address_by_default.yaml');
+        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
+        $mail = $this->getTemplateMail();
+        $mailNormalized = $serializer->normalize($mail);
+
+        $expected =  [
+            "Messages" => [
+                [
+                    'To' => [[
+                        'Email' => 'delivery_address@mail.de',
+                    ]],
+                    "TemplateLanguage" => true,
+                    "TemplateID" => 123,
+                    "Variables" =>  [
+                        "key1" => "val1",
+                        "key2" =>  [
+                            "val2.1" => "key2.1",
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $this->assertEquals($expected, $mailNormalized, 'Delivery Address defined in config overrides all recipients.');
+    }
+
     private function getTemplateMail(): MailjetTemplateMail
     {
         return (new MailjetTemplateMail(123))

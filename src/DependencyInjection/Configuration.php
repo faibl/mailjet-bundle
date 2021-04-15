@@ -24,15 +24,22 @@ class Configuration implements ConfigurationInterface
                                     ->scalarNode('secret')->isRequired()->cannotBeEmpty()->end()
                                 ->end()
                             ->end() // api
-                            ->scalarNode('logger')->defaultValue('logger')->end()
-                            ->scalarNode('delivery_disabled')->defaultFalse()->end()
-                            ->scalarNode('delivery_address')->defaultNull()->end()
-                            ->scalarNode('receiver_errors')->defaultNull()->end()
+                            ->scalarNode('logger')->end()
+                            ->scalarNode('delivery_disabled')->end()
+                            ->scalarNode('delivery_address')->end()
+                            ->scalarNode('receiver_errors')->end()
                         ->end()
                     ->end()
                 ->end()
+            // set default values for all accounts
+            ->scalarNode('logger')->defaultValue('logger')->end()
+            ->scalarNode('delivery_disabled')->defaultFalse()->end()
+            ->scalarNode('delivery_address')->defaultNull()->end()
+            ->scalarNode('receiver_errors')->defaultNull()->end()
         ;
 
         return $treeBuilder;
     }
+
+
 }

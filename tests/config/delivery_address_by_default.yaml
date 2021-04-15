@@ -1,0 +1,7 @@
+faibl_mailjet:
+  accounts:
+    account_1:
+      api:
+        key: mailjet_key
+        secret: mailjet_secret
+  delivery_address: 'delivery_address@mail.de'
