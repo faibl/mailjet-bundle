@@ -95,7 +95,7 @@ class MailjetTextMailSerializerTest extends FaiblMailjetBundleTestCase
             ->addReceiverBcc((new MailjetAddress('receiver_bcc@email.de', 'ReceiverBcc Receive')))
             ->setTextPart('TEXT')
             ->setHtmlPart('<p>HTML</p>')
-            ->setAttachment((new MailjetAttachment())
+            ->addAttachment((new MailjetAttachment())
                 ->setContent('TEXT')
                 ->setContentType('text/plain')
                 ->setFilename('content.txt')

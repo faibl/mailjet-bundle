@@ -2,6 +2,7 @@
 
 namespace Faibl\MailjetBundle\Serializer\Normalizer;
 
+use Faibl\MailjetBundle\Model\MailjetAttachment;
 use Faibl\MailjetBundle\Model\MailjetTextMail;
 use Faibl\MailjetBundle\Model\MailjetMail;
 use Faibl\MailjetBundle\Model\MailjetAddress;
@@ -69,17 +70,24 @@ class MailjetMailNormalizer implements NormalizerInterface
             'Subject' => $mail->getSubject(),
             'TextPart' => $mail->getTextPart() ?? null,
             'HtmlPart' => $mail->getHtmlPart() ?? null,
-            'Attachments' => $this->normalizeAttachment($mail),
+            'Attachments' => $this->normalizeAttachments($mail),
         ];
     }
 
-    private function normalizeAttachment(MailjetTextMail $mail, array $context = []): array
+    private function normalizeAttachments(MailjetTextMail $mail, array $context = []): array
     {
-        return $mail->getAttachment() ? [[
-            'ContentType' => $mail->getAttachment()->getContentType(),
-            'Filename' => $mail->getAttachment()->getFilename(),
-            'Base64Content' => $mail->getAttachment()->getContent(),
-        ]] : [];
+        return array_map(function (MailjetAttachment $attachment) {
+            return $this->normalizeAttachment($attachment);
+        }, $mail->getAttachments());
+    }
+
+    private function normalizeAttachment(MailjetAttachment $attachment): array
+    {
+        return [
+            'ContentType' => $attachment->getContentType(),
+            'Filename' => $attachment->getFilename(),
+            'Base64Content' => $attachment->getContent(),
+        ];
     }
 
     private function normalizeTemplateMailContent(MailjetTemplateMail $mail, array $context = []): array

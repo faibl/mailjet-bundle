@@ -80,7 +80,7 @@ class MailjetTextMailSerializerMultipleReceiverTest extends FaiblMailjetBundleTe
             )
             ->setTextPart('TEXT')
             ->setHtmlPart('<p>HTML</p>')
-            ->setAttachment((new MailjetAttachment())
+            ->addAttachment((new MailjetAttachment())
                 ->setContent('TEXT')
                 ->setContentType('text/plain')
                 ->setFilename('content.txt')
