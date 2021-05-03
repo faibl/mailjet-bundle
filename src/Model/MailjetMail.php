@@ -80,6 +80,14 @@ class MailjetMail
         return $this;
     }
 
+    /**
+     * @deprecated 
+     */
+    public function setAttachment(MailjetAttachment $attachment): self
+    {
+        return $this->addAttachment($attachment);
+    }
+
     public function setAttachments(array $attachments): self
     {
         foreach ($attachments as $attachment) {
