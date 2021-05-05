@@ -36,7 +36,7 @@ class FaiblMailjetExtension extends ConfigurableExtension
     {
         unset($config['accounts']);
         // override global with account-config
-        return array_merge($config, $accountConfig);
+        return array_merge_recursive($config, $accountConfig);
     }
 
     public function registerServices(ContainerBuilder $container, string $name, array $config): void
