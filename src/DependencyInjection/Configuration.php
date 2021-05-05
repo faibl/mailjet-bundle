@@ -26,7 +26,17 @@ class Configuration implements ConfigurationInterface
                             ->end() // api
                             ->scalarNode('logger')->end()
                             ->scalarNode('delivery_disabled')->end()
-                            ->arrayNode('delivery_addresses')->scalarPrototype()->end()->end()
+                            ->arrayNode('delivery_addresses')
+                                ->performNoDeepMerging()
+                                ->beforeNormalization()
+                                    ->ifArray()
+                                        ->then(function ($v) {
+                                            return array_filter(array_values($v));
+                                        })
+                                    ->end()
+                                ->prototype('scalar')
+                                ->end()
+                            ->end()
                             ->scalarNode('receiver_errors')->end()
                         ->end()
                     ->end()
@@ -34,7 +44,17 @@ class Configuration implements ConfigurationInterface
             // set default values for all accounts
             ->scalarNode('logger')->defaultValue('logger')->end()
             ->scalarNode('delivery_disabled')->defaultFalse()->end()
-            ->arrayNode('delivery_addresses')->scalarPrototype()->end()->end()
+            ->arrayNode('delivery_addresses')
+                ->performNoDeepMerging()
+                ->beforeNormalization()
+                    ->ifArray()
+                        ->then(function ($v) {
+                            return array_filter(array_values($v));
+                        })
+                    ->end()
+                ->prototype('scalar')
+                ->end()
+            ->end()
             ->scalarNode('receiver_errors')->defaultNull()->end()
         ;
 
