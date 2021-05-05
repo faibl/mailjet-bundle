@@ -19,4 +19,15 @@ class ArrayUtil
 
         return ArrayUtil::filterEmpty($data);
     }
+
+    public static function stringToArray(string $string = null, string $separater = ','): array
+    {
+        if (!is_string($string) || empty($string)) {
+            return [];
+        }
+
+        return array_map(function (string $item) {
+            return trim($item);
+        }, explode($separater, (string) $string));
+    }
 }

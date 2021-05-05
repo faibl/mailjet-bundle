@@ -65,4 +65,13 @@ class ArrayUtilTest extends TestCase
 
         $this->assertEquals($expected, ArrayUtil::filterEmptyRecursive($array), 'Test filter empty values from nested array');
     }
+
+    public function test_string_to_array()
+    {
+        $this->assertEquals([], ArrayUtil::stringToArray(null), 'Test null converted to empty array');
+        $this->assertEquals([], ArrayUtil::stringToArray(''), 'Test empty string converted to empty array');
+        $this->assertEquals(['item1'], ArrayUtil::stringToArray('item1'), 'Test single value converted to array');
+        $this->assertEquals(['item1','item2'], ArrayUtil::stringToArray('item1,item2'), 'Test multiple values converted to array');
+        $this->assertEquals(['item1','item2','item3'], ArrayUtil::stringToArray('item1; item2  ;   item3', ';'), 'Test trim and separator');
+    }
 }

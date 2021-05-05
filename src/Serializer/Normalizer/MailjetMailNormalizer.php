@@ -17,10 +17,12 @@ class MailjetMailNormalizer implements NormalizerInterface
     private $deliveryAddresses;
     private $deliveryDisabled;
 
-    public function __construct(string $receiverErrors = null, array $deliveryAddresses = null, bool $deliveryDisabled = false)
+    public function __construct(string $receiverErrors = null, string $deliveryAddresses = null, bool $deliveryDisabled = false)
     {
         $this->receiverErrors = $receiverErrors;
-        $this->deliveryAddresses = $deliveryAddresses;
+        // unfortunately we cannot pass array as env-vars
+        // to solve this, multiple email-addresses can be provided in comma-separated string
+        $this->deliveryAddresses = ArrayUtil::stringToArray($deliveryAddresses);
         $this->deliveryDisabled = $deliveryDisabled;
     }
 
