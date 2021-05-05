@@ -54,7 +54,7 @@ class MailjetTextMailSerializerTest extends FaiblMailjetBundleTestCase
 
     public function test_text_mail_to_delivery_address()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/delivery_address.yaml');
+        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/delivery_addresses.yaml');
         $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTextMail();
 
@@ -63,9 +63,14 @@ class MailjetTextMailSerializerTest extends FaiblMailjetBundleTestCase
         $expected =  [
             "Messages" => [
                 [
-                    'To' => [[
-                        'Email' => 'delivery_address@mail.de',
-                    ]],
+                    'To' => [
+                        [
+                            'Email' => 'delivery_address1@mail.de',
+                        ],
+                        [
+                            'Email' => 'delivery_address2@mail.de',
+                        ]
+                    ],
                     'From' => [
                         'Email' => 'sender@email.de',
                         'Name' => 'Sender Send',

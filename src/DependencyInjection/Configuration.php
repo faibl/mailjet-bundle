@@ -19,14 +19,14 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->arrayNode('api')
                                 ->children()
-                                    ->scalarNode('version')->defaultValue('3.1')->end()
+                                    ->floatNode('version')->defaultValue('3.1')->end()
                                     ->scalarNode('key')->isRequired()->cannotBeEmpty()->end()
                                     ->scalarNode('secret')->isRequired()->cannotBeEmpty()->end()
                                 ->end()
                             ->end() // api
                             ->scalarNode('logger')->end()
                             ->scalarNode('delivery_disabled')->end()
-                            ->scalarNode('delivery_address')->end()
+                            ->arrayNode('delivery_addresses')->scalarPrototype()->end()->end()
                             ->scalarNode('receiver_errors')->end()
                         ->end()
                     ->end()
@@ -34,7 +34,7 @@ class Configuration implements ConfigurationInterface
             // set default values for all accounts
             ->scalarNode('logger')->defaultValue('logger')->end()
             ->scalarNode('delivery_disabled')->defaultFalse()->end()
-            ->scalarNode('delivery_address')->defaultNull()->end()
+            ->arrayNode('delivery_addresses')->scalarPrototype()->end()->end()
             ->scalarNode('receiver_errors')->defaultNull()->end()
         ;
 

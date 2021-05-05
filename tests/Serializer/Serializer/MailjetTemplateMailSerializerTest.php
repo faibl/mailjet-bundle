@@ -45,9 +45,9 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
         $this->assertEquals($expected, $mailNormalized, 'Normalize Template-Mail.');
     }
 
-    public function test_text_mail_to_delivery_address()
+    public function test_text_mail_to_delivery_addresses()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/delivery_address.yaml');
+        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/delivery_addresses.yaml');
         $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTemplateMail();
         $mailNormalized = $serializer->normalize($mail);
@@ -55,9 +55,14 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
         $expected =  [
             "Messages" => [
                 [
-                    'To' => [[
-                        'Email' => 'delivery_address@mail.de',
-                    ]],
+                    'To' => [
+                        [
+                            'Email' => 'delivery_address1@mail.de',
+                        ],
+                        [
+                            'Email' => 'delivery_address2@mail.de',
+                        ]
+                    ],
                     "TemplateLanguage" => true,
                     "TemplateID" => 123,
                     "Variables" =>  [
@@ -73,9 +78,9 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
         $this->assertEquals($expected, $mailNormalized, 'Delivery Address defined in config overrides all recipients.');
     }
 
-    public function test_text_mail_to_delivery_address_by_default()
+    public function test_text_mail_to_delivery_addresses_by_default()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/delivery_address_by_default.yaml');
+        $this->bootFaiblMailjetBundleKernel(__DIR__ . '/../../config/delivery_addresses_by_default.yaml');
         $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTemplateMail();
         $mailNormalized = $serializer->normalize($mail);
@@ -83,9 +88,14 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
         $expected =  [
             "Messages" => [
                 [
-                    'To' => [[
-                        'Email' => 'delivery_address@mail.de',
-                    ]],
+                    'To' => [
+                        [
+                            'Email' => 'delivery_address1@mail.de',
+                        ],
+                        [
+                            'Email' => 'delivery_address2@mail.de',
+                        ]
+                    ],
                     "TemplateLanguage" => true,
                     "TemplateID" => 123,
                     "Variables" =>  [

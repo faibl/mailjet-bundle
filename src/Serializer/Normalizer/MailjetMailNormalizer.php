@@ -2,6 +2,7 @@
 
 namespace Faibl\MailjetBundle\Serializer\Normalizer;
 
+use Faibl\MailjetBundle\Model\MailjetAddressCollection;
 use Faibl\MailjetBundle\Model\MailjetAttachment;
 use Faibl\MailjetBundle\Model\MailjetTextMail;
 use Faibl\MailjetBundle\Model\MailjetMail;
@@ -13,13 +14,13 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 class MailjetMailNormalizer implements NormalizerInterface
 {
     private $receiverErrors;
-    private $deliveryAddress;
+    private $deliveryAddresses;
     private $deliveryDisabled;
 
-    public function __construct(string $receiverErrors = null, string $deliveryAddress = null, bool $deliveryDisabled = false)
+    public function __construct(string $receiverErrors = null, array $deliveryAddresses = null, bool $deliveryDisabled = false)
     {
         $this->receiverErrors = $receiverErrors;
-        $this->deliveryAddress = $deliveryAddress;
+        $this->deliveryAddresses = $deliveryAddresses;
         $this->deliveryDisabled = $deliveryDisabled;
     }
 
@@ -104,22 +105,30 @@ class MailjetMailNormalizer implements NormalizerInterface
 
     private function normalizeMessageBase(MailjetMail $mail): array
     {
-        if (empty($this->deliveryAddress)) {
+        if (empty($this->deliveryAddresses)) {
             return [
-                'To' => $this->normalizeReceivers($mail->getReceiver()),
-                'Cc' => $this->normalizeReceivers($mail->getReceiverCc()),
-                'Bcc' => $this->normalizeReceivers($mail->getReceiverBcc()),
+                'To' => $this->normalizeReceivers($mail->getReceivers()),
+                'Cc' => $this->normalizeReceivers($mail->getReceiversCc()),
+                'Bcc' => $this->normalizeReceivers($mail->getReceiversBcc()),
             ];
         }
 
         return [
-            'To' => [$this->normalizeReceiver(new MailjetAddress($this->deliveryAddress))],
+            // if delivery_addresses is set, override all other receivers
+            'To' => $this->normalizeAddressCollection(new MailjetAddressCollection($this->deliveryAddresses)),
         ];
     }
 
     private function normalizeSandboxMode(MailjetMail $mail): array
     {
         return $mail->isSandboxMode() ? ['SandboxMode' => true] : [];
+    }
+
+    private function normalizeAddressCollection(MailjetAddressCollection $collection): array
+    {
+        return array_map(function (MailjetAddress $receiver) {
+            return $this->normalizeReceiver($receiver);
+        }, $collection->getAddresses());
     }
 
     private function normalizeReceivers(array $receivers): array

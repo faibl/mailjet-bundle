@@ -4,4 +4,4 @@ faibl_mailjet:
       api:
         key: mailjet_key
         secret: mailjet_secret
-  delivery_address: 'delivery_address@mail.de'
+      delivery_addresses: ['delivery_address1@mail.de', 'delivery_address2@mail.de']

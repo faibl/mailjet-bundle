@@ -6,9 +6,9 @@ class MailjetAddressCollection
 {
     private $addresses = [];
 
-    public function __construct(array $addressCollection = [])
+    public function __construct(array $addresses = [])
     {
-        foreach ($addressCollection as $address) {
+        foreach ($addresses as $address) {
             $this->addresses[] = new MailjetAddress($address);
         }
     }

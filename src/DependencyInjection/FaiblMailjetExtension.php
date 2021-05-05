@@ -53,7 +53,7 @@ class FaiblMailjetExtension extends ConfigurableExtension
         $normalizerId = sprintf('fbl_mailjet.normalizer.%s', $name);
         $normalizer = (new Definition(MailjetMailNormalizer::class))
             ->setArgument(0, $config['receiver_errors'])
-            ->setArgument(1, $config['delivery_address'])
+            ->setArgument(1, $config['delivery_addresses'])
             ->setPublic(true);
         $container->setDefinition($normalizerId, $normalizer);
 

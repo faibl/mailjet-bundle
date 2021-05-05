@@ -33,7 +33,7 @@ faibl_mailjet:
         secret: mailjet_secret_2
   receiver_errors: 'error_address@mail.de'
   delivery_disabled: true
-  delivery_address: 'delivery_address@mail.de'
+  delivery_addresses: ['delivery_address1@mail.de', 'delivery_address2@mail.de']
         
 ```
 
@@ -61,7 +61,7 @@ faibl_mailjet:
   ## Disable delivery for all accounts. This activates mailjets snadbox 
   delivery_disabled: true
   ## Override delivery-address for all mailings. Mailings will only be send to this address
-  delivery_address: 'delivery_address@mail.de'
+  delivery_addresses: ['delivery_address1@mail.de', 'delivery_address2@mail.de']
         
 ```
 
