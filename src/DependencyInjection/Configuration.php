@@ -28,13 +28,13 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('delivery_disabled')->end()
                             ->arrayNode('delivery_addresses')
                                 ->performNoDeepMerging()
-                                ->beforeNormalization()
-                                    ->ifArray()
+                                    ->beforeNormalization()
+                                    ->ifString()
                                         ->then(function ($v) {
-                                            return array_filter(array_values($v));
+                                            return array($v);
                                         })
                                     ->end()
-                                ->prototype('scalar')
+                                    ->prototype('scalar')
                                 ->end()
                             ->end()
                             ->scalarNode('receiver_errors')->end()
@@ -47,9 +47,9 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('delivery_addresses')
                 ->performNoDeepMerging()
                 ->beforeNormalization()
-                    ->ifArray()
+                    ->ifString()
                         ->then(function ($v) {
-                            return array_filter(array_values($v));
+                            return array($v);
                         })
                     ->end()
                 ->prototype('scalar')
