@@ -77,7 +77,7 @@ class MailjetMailNormalizer implements NormalizerInterface
         ];
     }
 
-    private function normalizeAttachments(MailjetTextMail $mail, array $context = []): array
+    private function normalizeAttachments(MailjetMail $mail, array $context = []): array
     {
         return array_map(function (MailjetAttachment $attachment) {
             return $this->normalizeAttachment($attachment);
@@ -99,6 +99,7 @@ class MailjetMailNormalizer implements NormalizerInterface
             'TemplateLanguage' => true,
             'TemplateID' => $mail->getTemplateId(),
             'Variables' => $mail->getVariables(),
+            'Attachments' => $this->normalizeAttachments($mail),
             "TemplateErrorReporting" => [
                 "Email" => $this->receiverErrors,
             ],
