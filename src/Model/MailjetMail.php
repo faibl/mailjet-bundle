@@ -45,7 +45,9 @@ class MailjetMail
 
     public function addReceiverCc(MailjetAddress $receiver): self
     {
-        $this->receiversCc[] = $receiver;
+        if (!$this->isReceiver($receiver)) {
+            $this->receiversCc[] = $receiver;
+        }
 
         return $this;
     }
