@@ -69,7 +69,7 @@ class MailjetMailNormalizer implements NormalizerInterface
     private function normalizeBasicMailContent(MailjetTextMail $mail, array $context = []): array
     {
         return [
-            'From' => $mail->getSender() ? $this->normalizeReceiver($mail->getSender()) : null,
+            'From' => $mail->getSender() ? $this->normalizeAddress($mail->getSender()) : null,
             'Subject' => $mail->getSubject(),
             'TextPart' => $mail->getTextPart() ?? null,
             'HtmlPart' => $mail->getHtmlPart() ?? null,
@@ -110,9 +110,9 @@ class MailjetMailNormalizer implements NormalizerInterface
     {
         if (empty($this->deliveryAddresses)) {
             return [
-                'To' => $this->normalizeReceivers($mail->getReceivers()),
-                'Cc' => $this->normalizeReceivers($mail->getReceiversCc()),
-                'Bcc' => $this->normalizeReceivers($mail->getReceiversBcc()),
+                'To' => $this->normalizeAddresses($mail->getReceivers()),
+                'Cc' => $this->normalizeAddresses($mail->getReceiversCc()),
+                'Bcc' => $this->normalizeAddresses($mail->getReceiversBcc()),
             ];
         }
 
@@ -130,18 +130,18 @@ class MailjetMailNormalizer implements NormalizerInterface
     private function normalizeAddressCollection(MailjetAddressCollection $collection): array
     {
         return array_map(function (MailjetAddress $receiver) {
-            return $this->normalizeReceiver($receiver);
+            return $this->normalizeAddress($receiver);
         }, $collection->getAddresses());
     }
 
-    private function normalizeReceivers(array $receivers): array
+    private function normalizeAddresses(array $receivers): array
     {
         return array_map(function (MailjetAddress $receiver) {
-            return $this->normalizeReceiver($receiver);
+            return $this->normalizeAddress($receiver);
         }, $receivers);
     }
 
-    private function normalizeReceiver(MailjetAddress $receiver): array
+    private function normalizeAddress(MailjetAddress $receiver): array
     {
         return [
             'Email' => $receiver->getEmail(),

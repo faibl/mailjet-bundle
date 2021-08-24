@@ -10,6 +10,18 @@ class MailjetMail
     private $attachments = [];
     private $sandboxMode = false;
 
+    public function isReceiver(MailjetAddress $receiver): bool
+    {
+        foreach ($this->getReceivers() as $existingReceiver) {
+            /** @var MailjetAddress $existingReceiver */
+            if ($existingReceiver->getEmail() === $receiver->getEmail()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function addReceiver(MailjetAddress $receiver): self
     {
         $this->receivers[] = $receiver;
@@ -54,7 +66,9 @@ class MailjetMail
 
     public function addReceiverBcc(MailjetAddress $receiver): self
     {
-        $this->receiversBcc[] = $receiver;
+        if (!$this->isReceiver($receiver)) {
+            $this->receiversBcc[] = $receiver;
+        }
 
         return $this;
     }
