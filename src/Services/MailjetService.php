@@ -25,20 +25,22 @@ class MailjetService
 
     public function send(MailjetMail $mail): ?bool
     {
-        $response = $this->client->post(Resources::$Email, ['body' => $this->serializer->normalize($mail)]);
+        $body = $this->serializer->normalize($mail);
+        $response = $this->client->post(Resources::$Email, ['body' => $body]);
 
-        $this->logErrors($response);
+        $this->logErrors($response, $body);
 
         return $response->success();
     }
 
-    private function logErrors(Response $response): void
+    private function logErrors(Response $response, array $body): void
     {
         if ($response->success() === false) {
             $error = sprintf(
-                'Unexpected API-Response. Status: %s, Message. %s',
+                'Unexpected API-Response. Status: %s, Message: %s, Mail: %s',
                 $response->getStatus(),
-                $response->getReasonPhrase()
+                $response->getReasonPhrase(),
+                print_r($body, true)
             );
             $this->logger->error($error);
 
