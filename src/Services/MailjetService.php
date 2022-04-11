@@ -33,6 +33,16 @@ class MailjetService
         return $response->success();
     }
 
+    public function sendBulk(array $mails): ?bool
+    {
+        $body = $this->serializer->normalize($mails);
+        $response = $this->client->post(Resources::$Email, ['body' => $body]);
+
+        $this->logErrors($response, $body);
+
+        return $response->success();
+    }
+
     private function logErrors(Response $response, array $body): void
     {
         if ($response->success() === false) {

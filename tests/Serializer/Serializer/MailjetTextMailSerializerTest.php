@@ -91,6 +91,82 @@ class MailjetTextMailSerializerTest extends FaiblMailjetBundleTestCase
         $this->assertEquals($expected, $mailNormalized, 'Delivery Address defined in config overrides all recipients.');
     }
 
+    public function test_multiple_text_mails()
+    {
+        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/default.yaml');
+        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
+        $mails = [$this->getTextMail(), $this->getTextMail()];
+
+        $mailNormalized = $serializer->normalize($mails);
+
+        $expected =  [
+            [
+                "Messages" => [
+                    [
+                        'To' => [[
+                            'Email' => 'receiver@email.de',
+                            'Name' => 'Receiver Receive',
+                        ]],
+                        'Cc' => [[
+                            'Email' => 'receiver_cc@email.de',
+                            'Name' => 'ReceiverCc Receive',
+                        ]],
+                        'Bcc' => [[
+                            'Email' => 'receiver_bcc@email.de',
+                            'Name' => 'ReceiverBcc Receive',
+                        ]],
+                        'From' => [
+                            'Email' => 'sender@email.de',
+                            'Name' => 'Sender Send',
+                        ],
+                        'TextPart' => 'TEXT',
+                        'HtmlPart' => '<p>HTML</p>',
+                        'Attachments' => [
+                            [
+                                'ContentType' => 'text/plain',
+                                'Filename' => 'content.txt',
+                                'Base64Content' => base64_encode('TEXT')
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                "Messages" => [
+                    [
+                        'To' => [[
+                            'Email' => 'receiver@email.de',
+                            'Name' => 'Receiver Receive',
+                        ]],
+                        'Cc' => [[
+                            'Email' => 'receiver_cc@email.de',
+                            'Name' => 'ReceiverCc Receive',
+                        ]],
+                        'Bcc' => [[
+                            'Email' => 'receiver_bcc@email.de',
+                            'Name' => 'ReceiverBcc Receive',
+                        ]],
+                        'From' => [
+                            'Email' => 'sender@email.de',
+                            'Name' => 'Sender Send',
+                        ],
+                        'TextPart' => 'TEXT',
+                        'HtmlPart' => '<p>HTML</p>',
+                        'Attachments' => [
+                            [
+                                'ContentType' => 'text/plain',
+                                'Filename' => 'content.txt',
+                                'Base64Content' => base64_encode('TEXT')
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+        ];
+
+        $this->assertEquals($expected, $mailNormalized, 'Normalize Text-Mail.');
+    }
+
     private function getTextMail(): MailjetTextMail
     {
         return (new MailjetTextMail())
