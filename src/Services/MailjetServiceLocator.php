@@ -28,4 +28,15 @@ class MailjetServiceLocator
 
         return $service->send($mail);
     }
+
+    public function sendBulk(string $name, array $mails): ?bool
+    {
+        $service = $this->getService($name);
+
+        if (!$service) {
+            throw new \Exception(sprintf('Unknown account %s. Please check your config.', $name));
+        }
+
+        return $service->sendBulk($mails);
+    }
 }
