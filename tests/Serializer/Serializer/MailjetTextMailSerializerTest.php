@@ -17,34 +17,30 @@ class MailjetTextMailSerializerTest extends FaiblMailjetBundleTestCase
 
         $mailNormalized = $serializer->normalize($mail);
 
-        $expected =  [
-            "Messages" => [
+        $expected = [
+            'To' => [[
+                'Email' => 'receiver@email.de',
+                'Name' => 'Receiver Receive',
+            ]],
+            'Cc' => [[
+                'Email' => 'receiver_cc@email.de',
+                'Name' => 'ReceiverCc Receive',
+            ]],
+            'Bcc' => [[
+                'Email' => 'receiver_bcc@email.de',
+                'Name' => 'ReceiverBcc Receive',
+            ]],
+            'From' => [
+                'Email' => 'sender@email.de',
+                'Name' => 'Sender Send',
+            ],
+            'TextPart' => 'TEXT',
+            'HtmlPart' => '<p>HTML</p>',
+            'Attachments' => [
                 [
-                    'To' => [[
-                        'Email' => 'receiver@email.de',
-                        'Name' => 'Receiver Receive',
-                    ]],
-                    'Cc' => [[
-                        'Email' => 'receiver_cc@email.de',
-                        'Name' => 'ReceiverCc Receive',
-                    ]],
-                    'Bcc' => [[
-                        'Email' => 'receiver_bcc@email.de',
-                        'Name' => 'ReceiverBcc Receive',
-                    ]],
-                    'From' => [
-                        'Email' => 'sender@email.de',
-                        'Name' => 'Sender Send',
-                    ],
-                    'TextPart' => 'TEXT',
-                    'HtmlPart' => '<p>HTML</p>',
-                    'Attachments' => [
-                        [
-                            'ContentType' => 'text/plain',
-                            'Filename' => 'content.txt',
-                            'Base64Content' => base64_encode('TEXT')
-                        ]
-                    ]
+                    'ContentType' => 'text/plain',
+                    'Filename' => 'content.txt',
+                    'Base64Content' => base64_encode('TEXT')
                 ]
             ]
         ];
@@ -60,30 +56,26 @@ class MailjetTextMailSerializerTest extends FaiblMailjetBundleTestCase
 
         $mailNormalized = $serializer->normalize($mail);
 
-        $expected =  [
-            "Messages" => [
+        $expected = [
+            'To' => [
                 [
-                    'To' => [
-                        [
-                            'Email' => 'delivery_address1@mail.de',
-                        ],
-                        [
-                            'Email' => 'delivery_address2@mail.de',
-                        ]
-                    ],
-                    'From' => [
-                        'Email' => 'sender@email.de',
-                        'Name' => 'Sender Send',
-                    ],
-                    'TextPart' => 'TEXT',
-                    'HtmlPart' => '<p>HTML</p>',
-                    'Attachments' => [
-                        [
-                            'ContentType' => 'text/plain',
-                            'Filename' => 'content.txt',
-                            'Base64Content' => base64_encode('TEXT')
-                        ]
-                    ]
+                    'Email' => 'delivery_address1@mail.de',
+                ],
+                [
+                    'Email' => 'delivery_address2@mail.de',
+                ]
+            ],
+            'From' => [
+                'Email' => 'sender@email.de',
+                'Name' => 'Sender Send',
+            ],
+            'TextPart' => 'TEXT',
+            'HtmlPart' => '<p>HTML</p>',
+            'Attachments' => [
+                [
+                    'ContentType' => 'text/plain',
+                    'Filename' => 'content.txt',
+                    'Base64Content' => base64_encode('TEXT')
                 ]
             ]
         ];
@@ -99,69 +91,61 @@ class MailjetTextMailSerializerTest extends FaiblMailjetBundleTestCase
 
         $mailNormalized = $serializer->normalize($mails);
 
-        $expected =  [
+        $expected = [
             [
-                "Messages" => [
+                'To' => [[
+                    'Email' => 'receiver@email.de',
+                    'Name' => 'Receiver Receive',
+                ]],
+                'Cc' => [[
+                    'Email' => 'receiver_cc@email.de',
+                    'Name' => 'ReceiverCc Receive',
+                ]],
+                'Bcc' => [[
+                    'Email' => 'receiver_bcc@email.de',
+                    'Name' => 'ReceiverBcc Receive',
+                ]],
+                'From' => [
+                    'Email' => 'sender@email.de',
+                    'Name' => 'Sender Send',
+                ],
+                'TextPart' => 'TEXT',
+                'HtmlPart' => '<p>HTML</p>',
+                'Attachments' => [
                     [
-                        'To' => [[
-                            'Email' => 'receiver@email.de',
-                            'Name' => 'Receiver Receive',
-                        ]],
-                        'Cc' => [[
-                            'Email' => 'receiver_cc@email.de',
-                            'Name' => 'ReceiverCc Receive',
-                        ]],
-                        'Bcc' => [[
-                            'Email' => 'receiver_bcc@email.de',
-                            'Name' => 'ReceiverBcc Receive',
-                        ]],
-                        'From' => [
-                            'Email' => 'sender@email.de',
-                            'Name' => 'Sender Send',
-                        ],
-                        'TextPart' => 'TEXT',
-                        'HtmlPart' => '<p>HTML</p>',
-                        'Attachments' => [
-                            [
-                                'ContentType' => 'text/plain',
-                                'Filename' => 'content.txt',
-                                'Base64Content' => base64_encode('TEXT')
-                            ]
-                        ]
+                        'ContentType' => 'text/plain',
+                        'Filename' => 'content.txt',
+                        'Base64Content' => base64_encode('TEXT')
                     ]
                 ]
             ],
             [
-                "Messages" => [
+                'To' => [[
+                    'Email' => 'receiver@email.de',
+                    'Name' => 'Receiver Receive',
+                ]],
+                'Cc' => [[
+                    'Email' => 'receiver_cc@email.de',
+                    'Name' => 'ReceiverCc Receive',
+                ]],
+                'Bcc' => [[
+                    'Email' => 'receiver_bcc@email.de',
+                    'Name' => 'ReceiverBcc Receive',
+                ]],
+                'From' => [
+                    'Email' => 'sender@email.de',
+                    'Name' => 'Sender Send',
+                ],
+                'TextPart' => 'TEXT',
+                'HtmlPart' => '<p>HTML</p>',
+                'Attachments' => [
                     [
-                        'To' => [[
-                            'Email' => 'receiver@email.de',
-                            'Name' => 'Receiver Receive',
-                        ]],
-                        'Cc' => [[
-                            'Email' => 'receiver_cc@email.de',
-                            'Name' => 'ReceiverCc Receive',
-                        ]],
-                        'Bcc' => [[
-                            'Email' => 'receiver_bcc@email.de',
-                            'Name' => 'ReceiverBcc Receive',
-                        ]],
-                        'From' => [
-                            'Email' => 'sender@email.de',
-                            'Name' => 'Sender Send',
-                        ],
-                        'TextPart' => 'TEXT',
-                        'HtmlPart' => '<p>HTML</p>',
-                        'Attachments' => [
-                            [
-                                'ContentType' => 'text/plain',
-                                'Filename' => 'content.txt',
-                                'Base64Content' => base64_encode('TEXT')
-                            ]
-                        ]
+                        'ContentType' => 'text/plain',
+                        'Filename' => 'content.txt',
+                        'Base64Content' => base64_encode('TEXT')
                     ]
                 ]
-            ],
+            ]
         ];
 
         $this->assertEquals($expected, $mailNormalized, 'Normalize Text-Mail.');

@@ -38,11 +38,7 @@ class MailjetMailNormalizer implements NormalizerInterface
             $this->normalizeSandboxMode($object)
         );
 
-        return [
-            'Messages' => [
-                ArrayUtil::filterEmptyRecursive($messages)
-            ]
-        ];
+        return ArrayUtil::filterEmptyRecursive($messages);
     }
 
     public function supportsNormalization($data, $format = null)

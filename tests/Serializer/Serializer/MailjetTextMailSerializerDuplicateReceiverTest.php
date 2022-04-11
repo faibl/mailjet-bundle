@@ -18,40 +18,36 @@ class MailjetTextMailSerializerDuplicateReceiverTest extends FaiblMailjetBundleT
 
         $mailNormalized = $serializer->normalize($mail);
 
-        $expected =  [
-            "Messages" => [
+        $expected = [
+            'To' => [
                 [
-                    'To' => [
-                        [
-                            'Email' => 'receiver1@email.de',
-                        ],
-                        [
-                            'Email' => 'receiver2@email.de',
-                        ]
-                    ],
-                    'Cc' => [
-                        [
-                            'Email' => 'receiver3@email.de',
-                        ]
-                    ],
-                    'Bcc' => [
-                        [
-                            'Email' => 'receiver4@email.de',
-                        ]
-                    ],
-                    'From' => [
-                        'Email' => 'sender@email.de',
-                        'Name' => 'Sender Send',
-                    ],
-                    'TextPart' => 'TEXT',
-                    'HtmlPart' => '<p>HTML</p>',
-                    'Attachments' => [
-                        [
-                            'ContentType' => 'text/plain',
-                            'Filename' => 'content.txt',
-                            'Base64Content' => base64_encode('TEXT')
-                        ]
-                    ]
+                    'Email' => 'receiver1@email.de',
+                ],
+                [
+                    'Email' => 'receiver2@email.de',
+                ]
+            ],
+            'Cc' => [
+                [
+                    'Email' => 'receiver3@email.de',
+                ]
+            ],
+            'Bcc' => [
+                [
+                    'Email' => 'receiver4@email.de',
+                ]
+            ],
+            'From' => [
+                'Email' => 'sender@email.de',
+                'Name' => 'Sender Send',
+            ],
+            'TextPart' => 'TEXT',
+            'HtmlPart' => '<p>HTML</p>',
+            'Attachments' => [
+                [
+                    'ContentType' => 'text/plain',
+                    'Filename' => 'content.txt',
+                    'Base64Content' => base64_encode('TEXT')
                 ]
             ]
         ];

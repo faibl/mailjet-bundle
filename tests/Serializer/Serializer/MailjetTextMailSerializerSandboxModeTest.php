@@ -17,21 +17,17 @@ class MailjetTextMailSerializerSandboxModeTest extends FaiblMailjetBundleTestCas
         $mailNormalized = $serializer->normalize($mail);
 
         $expected =  [
-            "Messages" => [
-                [
-                    'To' => [[
-                        'Email' => 'receiver@email.de',
-                        'Name' => 'Receiver Receive',
-                    ]],
-                    'From' => [
-                        'Email' => 'sender@email.de',
-                        'Name' => 'Sender Send',
-                    ],
-                    'TextPart' => 'TEXT',
-                    'HtmlPart' => '<p>HTML</p>',
-                    'SandboxMode' => true,
-                ]
-            ]
+            'To' => [[
+                'Email' => 'receiver@email.de',
+                'Name' => 'Receiver Receive',
+            ]],
+            'From' => [
+                'Email' => 'sender@email.de',
+                'Name' => 'Sender Send',
+            ],
+            'TextPart' => 'TEXT',
+            'HtmlPart' => '<p>HTML</p>',
+            'SandboxMode' => true,
         ];
 
         $this->assertEquals($expected, $mailNormalized, 'Normalize Text-Mail.');

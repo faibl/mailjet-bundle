@@ -25,20 +25,34 @@ class MailjetService
 
     public function send(MailjetMail $mail): ?bool
     {
-        $body = $this->serializer->normalize($mail);
-        $response = $this->client->post(Resources::$Email, ['body' => $body]);
+        $massage = $this->serializer->normalize($mail);
 
-        $this->logErrors($response, $body);
+        $content = [
+            'body' => [
+                'Messages' => [$massage]
+            ]
+        ];
+
+        $response = $this->client->post(Resources::$Email, $content);
+
+        $this->logErrors($response, $content);
 
         return $response->success();
     }
 
     public function sendBulk(array $mails): ?bool
     {
-        $body = $this->serializer->normalize($mails);
-        $response = $this->client->post(Resources::$Email, ['body' => $body]);
+        $massages = $this->serializer->normalize($mails);
 
-        $this->logErrors($response, $body);
+        $content = [
+            'body' => [
+                'Messages' => $massages
+            ]
+        ];
+
+        $response = $this->client->post(Resources::$Email, $content);
+
+        $this->logErrors($response, $content);
 
         return $response->success();
     }

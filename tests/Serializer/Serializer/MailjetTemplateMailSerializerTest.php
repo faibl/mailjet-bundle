@@ -15,29 +15,25 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
         $mail = $this->getTemplateMail();
         $mailNormalized = $serializer->normalize($mail);
 
-        $expected =  [
-            "Messages" => [
-                [
-                    'To' => [[
-                        'Email' => 'receiver@email.de',
-                        'Name' => 'Receiver Receive',
-                    ]],
-                    'Cc' => [[
-                        'Email' => 'receiver_cc@email.de',
-                        'Name' => 'ReceiverCc Receive',
-                    ]],
-                    'Bcc' => [[
-                        'Email' => 'receiver_bcc@email.de',
-                        'Name' => 'ReceiverBcc Receive',
-                    ]],
-                    "TemplateLanguage" => true,
-                    "TemplateID" => 123,
-                    "Variables" =>  [
-                        "key1" => "val1",
-                        "key2" =>  [
-                            "val2.1" => "key2.1",
-                        ]
-                    ]
+        $expected = [
+            'To' => [[
+                'Email' => 'receiver@email.de',
+                'Name' => 'Receiver Receive',
+            ]],
+            'Cc' => [[
+                'Email' => 'receiver_cc@email.de',
+                'Name' => 'ReceiverCc Receive',
+            ]],
+            'Bcc' => [[
+                'Email' => 'receiver_bcc@email.de',
+                'Name' => 'ReceiverBcc Receive',
+            ]],
+            "TemplateLanguage" => true,
+            "TemplateID" => 123,
+            "Variables" =>  [
+                "key1" => "val1",
+                "key2" =>  [
+                    "val2.1" => "key2.1",
                 ]
             ]
         ];
@@ -52,25 +48,21 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
         $mail = $this->getTemplateMail();
         $mailNormalized = $serializer->normalize($mail);
 
-        $expected =  [
-            "Messages" => [
+        $expected = [
+            'To' => [
                 [
-                    'To' => [
-                        [
-                            'Email' => 'delivery_address1@mail.de',
-                        ],
-                        [
-                            'Email' => 'delivery_address2@mail.de',
-                        ]
-                    ],
-                    "TemplateLanguage" => true,
-                    "TemplateID" => 123,
-                    "Variables" =>  [
-                        "key1" => "val1",
-                        "key2" =>  [
-                            "val2.1" => "key2.1",
-                        ]
-                    ]
+                    'Email' => 'delivery_address1@mail.de',
+                ],
+                [
+                    'Email' => 'delivery_address2@mail.de',
+                ]
+            ],
+            "TemplateLanguage" => true,
+            "TemplateID" => 123,
+            "Variables" =>  [
+                "key1" => "val1",
+                "key2" =>  [
+                    "val2.1" => "key2.1",
                 ]
             ]
         ];
@@ -85,9 +77,7 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
         $mail = $this->getTemplateMail();
         $mailNormalized = $serializer->normalize($mail);
 
-        $expected =  [
-            "Messages" => [
-                [
+        $expected = [
                     'To' => [
                         [
                             'Email' => 'delivery_address1@mail.de',
@@ -104,9 +94,7 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
                             "val2.1" => "key2.1",
                         ]
                     ]
-                ]
-            ]
-        ];
+                ];
 
         $this->assertEquals($expected, $mailNormalized, 'Delivery Address defined in config overrides all recipients.');
     }
@@ -123,54 +111,46 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
 
         $expected = [
             [
-                "Messages" => [
-                    [
-                        'To' => [[
-                            'Email' => 'receiver@email.de',
-                            'Name' => 'Receiver Receive',
-                        ]],
-                        'Cc' => [[
-                            'Email' => 'receiver_cc@email.de',
-                            'Name' => 'ReceiverCc Receive',
-                        ]],
-                        'Bcc' => [[
-                            'Email' => 'receiver_bcc@email.de',
-                            'Name' => 'ReceiverBcc Receive',
-                        ]],
-                        "TemplateLanguage" => true,
-                        "TemplateID" => 123,
-                        "Variables" =>  [
-                            "key1" => "val1",
-                            "key2" =>  [
-                                "val2.1" => "key2.1",
-                            ]
-                        ]
+                'To' => [[
+                    'Email' => 'receiver@email.de',
+                    'Name' => 'Receiver Receive',
+                ]],
+                'Cc' => [[
+                    'Email' => 'receiver_cc@email.de',
+                    'Name' => 'ReceiverCc Receive',
+                ]],
+                'Bcc' => [[
+                    'Email' => 'receiver_bcc@email.de',
+                    'Name' => 'ReceiverBcc Receive',
+                ]],
+                "TemplateLanguage" => true,
+                "TemplateID" => 123,
+                "Variables" =>  [
+                    "key1" => "val1",
+                    "key2" =>  [
+                        "val2.1" => "key2.1",
                     ]
                 ]
             ],
             [
-                "Messages" => [
-                    [
-                        'To' => [[
-                            'Email' => 'receiver@email.de',
-                            'Name' => 'Receiver Receive',
-                        ]],
-                        'Cc' => [[
-                            'Email' => 'receiver_cc@email.de',
-                            'Name' => 'ReceiverCc Receive',
-                        ]],
-                        'Bcc' => [[
-                            'Email' => 'receiver_bcc@email.de',
-                            'Name' => 'ReceiverBcc Receive',
-                        ]],
-                        "TemplateLanguage" => true,
-                        "TemplateID" => 123,
-                        "Variables" =>  [
-                            "key1" => "val1",
-                            "key2" =>  [
-                                "val2.1" => "key2.1",
-                            ]
-                        ]
+                'To' => [[
+                    'Email' => 'receiver@email.de',
+                    'Name' => 'Receiver Receive',
+                ]],
+                'Cc' => [[
+                    'Email' => 'receiver_cc@email.de',
+                    'Name' => 'ReceiverCc Receive',
+                ]],
+                'Bcc' => [[
+                    'Email' => 'receiver_bcc@email.de',
+                    'Name' => 'ReceiverBcc Receive',
+                ]],
+                "TemplateLanguage" => true,
+                "TemplateID" => 123,
+                "Variables" =>  [
+                    "key1" => "val1",
+                    "key2" =>  [
+                        "val2.1" => "key2.1",
                     ]
                 ]
             ]
