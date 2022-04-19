@@ -12,15 +12,11 @@ use Psr\Log\LoggerInterface;
 
 class MailjetService
 {
-    private $logger;
-    private $client;
-    private $serializer;
-
-    public function __construct(Client $client, MailjetMailSerializer $serializer, LoggerInterface $logger)
-    {
-        $this->client = $client;
-        $this->serializer = $serializer;
-        $this->logger = $logger;
+    public function __construct(
+        private Client $client,
+        private MailjetMailSerializer $serializer,
+        private LoggerInterface $logger
+    ) {
     }
 
     public function send(MailjetMail $mail): ?bool

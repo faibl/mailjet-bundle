@@ -4,8 +4,8 @@ namespace Faibl\MailjetBundle\Model;
 
 class MailjetAddress
 {
-    private $email;
-    private $name;
+    private string $email;
+    private ?string $name;
 
     public function __construct(string $email, string $name = null)
     {

@@ -13,20 +13,18 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class MailjetMailNormalizer implements NormalizerInterface
 {
-    private $receiverErrors;
-    private $deliveryAddresses;
-    private $deliveryDisabled;
+    private ?string $receiverErrors;
+    private array $deliveryAddresses;
 
-    public function __construct(string $receiverErrors = null, string $deliveryAddresses = null, bool $deliveryDisabled = false)
+    public function __construct(string $receiverErrors = null, string $deliveryAddresses = null)
     {
         $this->receiverErrors = $receiverErrors;
         // unfortunately we cannot pass array as env-vars
         // to solve this, multiple email-addresses can be provided in comma-separated string
         $this->deliveryAddresses = ArrayUtil::stringToArray($deliveryAddresses);
-        $this->deliveryDisabled = $deliveryDisabled;
     }
 
-    public function normalize($object, $format = null, array $context = [])
+    public function normalize($object, $format = null, array $context = []): ?array
     {
         if (!$object instanceof MailjetMail) {
             return null;
@@ -48,18 +46,10 @@ class MailjetMailNormalizer implements NormalizerInterface
 
     private function normalizeMessageContent(MailjetMail $mail, $context): array
     {
-        switch (true) {
-            case ($mail instanceof MailjetTextMail):
-                $messages = $this->normalizeBasicMailContent($mail, $context);
-                break;
-            case ($mail instanceof MailjetTemplateMail):
-                $messages = $this->normalizeTemplateMailContent($mail, $context);
-                break;
-            default:
-                throw new \InvalidArgumentException('Mail-Object of type %s cannot be normalized', get_class($mail));
-        }
-
-        return $messages;
+        return match (true) {
+            $mail instanceof MailjetTextMail => $this->normalizeBasicMailContent($mail, $context),
+            $mail instanceof MailjetTemplateMail => $this->normalizeTemplateMailContent($mail, $context),
+        };
     }
 
     private function normalizeBasicMailContent(MailjetTextMail $mail, array $context = []): array

@@ -4,11 +4,10 @@ namespace Faibl\MailjetBundle\Model;
 
 class MailjetTextMail extends MailjetMail
 {
-    /** @var MailjetAddress */
-    private $sender;
-    private $subject;
-    private $textPart;
-    private $htmlPart;
+    private ?MailjetAddress $sender = null;
+    private ?string $subject = null;
+    private ?string $textPart = null;
+    private ?string $htmlPart = null;
 
     public function getSender(): ?MailjetAddress
     {

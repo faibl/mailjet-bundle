@@ -4,7 +4,7 @@ namespace Faibl\MailjetBundle\Model;
 
 class MailjetAddressCollection
 {
-    private $addresses = [];
+    private array $addresses = [];
 
     public function __construct(array $addresses = [])
     {

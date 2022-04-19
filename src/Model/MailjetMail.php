@@ -4,11 +4,11 @@ namespace Faibl\MailjetBundle\Model;
 
 class MailjetMail
 {
-    private $receivers = [];
-    private $receiversCc = [];
-    private $receiversBcc = [];
-    private $attachments = [];
-    private $sandboxMode = false;
+    private array $receivers = [];
+    private array $receiversCc = [];
+    private array $receiversBcc = [];
+    private array $attachments = [];
+    private bool $sandboxMode = false;
 
     public function isReceiver(MailjetAddress $receiver): bool
     {
@@ -22,14 +22,14 @@ class MailjetMail
         return false;
     }
 
-    public function addReceiver(MailjetAddress $receiver): self
+    public function addReceiver(MailjetAddress $receiver): static
     {
         $this->receivers[] = $receiver;
 
         return $this;
     }
 
-    public function addReceivers(MailjetAddressCollection $receiverCollection): self
+    public function addReceivers(MailjetAddressCollection $receiverCollection): static
     {
         foreach ($receiverCollection->getAddresses() as $receiver) {
             $this->addReceiver($receiver);
@@ -43,7 +43,7 @@ class MailjetMail
         return $this->receivers;
     }
 
-    public function addReceiverCc(MailjetAddress $receiver): self
+    public function addReceiverCc(MailjetAddress $receiver): static
     {
         if (!$this->isReceiver($receiver)) {
             $this->receiversCc[] = $receiver;
@@ -52,7 +52,7 @@ class MailjetMail
         return $this;
     }
 
-    public function addReceiversCc(MailjetAddressCollection $receiverCollection): self
+    public function addReceiversCc(MailjetAddressCollection $receiverCollection): static
     {
         foreach ($receiverCollection->getAddresses() as $receiver) {
             $this->addReceiverCc($receiver);
@@ -66,7 +66,7 @@ class MailjetMail
         return $this->receiversCc;
     }
 
-    public function addReceiverBcc(MailjetAddress $receiver): self
+    public function addReceiverBcc(MailjetAddress $receiver): static
     {
         if (!$this->isReceiver($receiver)) {
             $this->receiversBcc[] = $receiver;
@@ -75,7 +75,7 @@ class MailjetMail
         return $this;
     }
 
-    public function addReceiversBcc(MailjetAddressCollection $receiverCollection): self
+    public function addReceiversBcc(MailjetAddressCollection $receiverCollection): static
     {
         foreach ($receiverCollection->getAddresses() as $receiver) {
             $this->addReceiverBcc($receiver);
@@ -89,7 +89,7 @@ class MailjetMail
         return $this->receiversBcc;
     }
 
-    public function addAttachment(MailjetAttachment $attachment): self
+    public function addAttachment(MailjetAttachment $attachment): static
     {
         $this->attachments[] = $attachment;
 
@@ -99,12 +99,12 @@ class MailjetMail
     /**
      * @deprecated
      */
-    public function setAttachment(MailjetAttachment $attachment): self
+    public function setAttachment(MailjetAttachment $attachment): static
     {
         return $this->addAttachment($attachment);
     }
 
-    public function setAttachments(array $attachments): self
+    public function setAttachments(array $attachments): static
     {
         foreach ($attachments as $attachment) {
             $this->addAttachment($attachment);
@@ -123,7 +123,7 @@ class MailjetMail
         return $this->sandboxMode;
     }
 
-    public function setSandboxMode(bool $sandboxMode): self
+    public function setSandboxMode(bool $sandboxMode): static
     {
         $this->sandboxMode = $sandboxMode;
 

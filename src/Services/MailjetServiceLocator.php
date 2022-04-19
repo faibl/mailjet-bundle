@@ -6,7 +6,7 @@ use Faibl\MailjetBundle\Model\MailjetMail;
 
 class MailjetServiceLocator
 {
-    private $services = [];
+    private array $services = [];
 
     public function addService(string $name, MailjetService $client): void
     {

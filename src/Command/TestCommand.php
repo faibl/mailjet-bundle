@@ -17,17 +17,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class TestCommand extends Command
 {
     protected static $defaultName = 'fbl:mailjet:test';
-    /** @var SymfonyStyle */
-    private $io;
-    private $mailjetService;
+    private ?SymfonyStyle $io = null;
+    private MailjetServiceLocator $mailjetServiceLocator;
 
-    public function __construct(MailjetServiceLocator $mailjetService)
+    public function __construct(MailjetServiceLocator $mailjetServiceLocator)
     {
-        $this->mailjetService = $mailjetService;
+        $this->mailjetServiceLocator = $mailjetServiceLocator;
         parent::__construct($this::$defaultName);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Sends testmail through MailJet')
@@ -93,7 +92,7 @@ class TestCommand extends Command
             ->setSubject('Testmail send by faibl-mailjet-bundle')
             ->setTextPart('Nothing to say...');
 
-        return $this->mailjetService->send($account, $mail);
+        return $this->mailjetServiceLocator->send($account, $mail);
     }
 
     private function sendTemplateMail(string $account, string $receiver, int $templateId): ?bool
@@ -101,6 +100,6 @@ class TestCommand extends Command
         $mail = (new MailjetTemplateMail($templateId))
             ->addReceiver((new MailjetAddress($receiver)));
 
-        return $this->mailjetService->send($account, $mail);
+        return $this->mailjetServiceLocator->send($account, $mail);
     }
 }

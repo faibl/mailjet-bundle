@@ -4,8 +4,8 @@ namespace Faibl\MailjetBundle\Model;
 
 class MailjetTemplateMail extends MailjetMail
 {
-    private $templateId;
-    private $variables = [];
+    private int $templateId;
+    private array $variables = [];
 
     public function __construct(int $templateId)
     {

@@ -4,9 +4,9 @@ namespace Faibl\MailjetBundle\Model;
 
 class MailjetAttachment
 {
-    private $contentType;
-    private $filename;
-    private $content;
+    private ?string $contentType = null;
+    private ?string $filename = null;
+    private ?string $content = null;
 
     public function getContentType(): string
     {
