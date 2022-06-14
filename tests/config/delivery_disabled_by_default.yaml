@@ -4,4 +4,4 @@ faibl_mailjet:
       api:
         key: mailjet_key
         secret: mailjet_secret
-  delivery_disabled: true
+  delivery_enabled: false

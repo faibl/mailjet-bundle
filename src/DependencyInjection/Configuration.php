@@ -25,7 +25,7 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end() // api
                             ->scalarNode('logger')->end()
-                            ->scalarNode('delivery_disabled')->end()
+                            ->booleanNode('delivery_enabled')->end()
                             ->scalarNode('delivery_addresses')->end()
                             ->scalarNode('receiver_errors')->end()
                         ->end()
@@ -33,7 +33,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
             // set default values for all accounts
             ->scalarNode('logger')->defaultValue('logger')->end()
-            ->scalarNode('delivery_disabled')->defaultFalse()->end()
+            ->booleanNode('delivery_enabled')->defaultFalse()->end()
             ->scalarNode('delivery_addresses')->end()
             ->scalarNode('receiver_errors')->defaultNull()->end()
         ;
