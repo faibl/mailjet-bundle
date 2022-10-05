@@ -21,11 +21,11 @@ class MailjetService
 
     public function send(MailjetMail $mail): ?bool
     {
-        $massage = $this->serializer->normalize($mail);
+        $messages = $this->serializer->normalize($mail);
 
         $content = [
             'body' => [
-                'Messages' => [$massage]
+                'Messages' => [$messages]
             ]
         ];
 
@@ -38,11 +38,11 @@ class MailjetService
 
     public function sendBulk(array $mails): ?bool
     {
-        $massages = $this->serializer->normalize($mails);
+        $messages = $this->serializer->normalize($mails);
 
         $content = [
             'body' => [
-                'Messages' => $massages
+                'Messages' => $messages
             ]
         ];
 
@@ -57,10 +57,11 @@ class MailjetService
     {
         if ($response->success() === false) {
             $error = sprintf(
-                'Unexpected API-Response. Status: %s, Message: %s, Mail: %s',
+                'Unexpected API-Response. Status: %s, Message: %s, Request: %s, Response: %s',
                 $response->getStatus(),
                 $response->getReasonPhrase(),
-                print_r($body, true)
+                print_r($body, true),
+                print_r($response->getBody(), true)
             );
             $this->logger->error($error);
 
