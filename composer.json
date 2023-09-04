@@ -13,11 +13,11 @@
         "php": ">=8.1",
         "mailjet/mailjet-apiv3-php": "^1.5",
         "monolog/monolog": "^1.1 || ^2.0 || ^3.0",
-        "symfony/serializer": "^4.4 || ^5.1",
-        "symfony/console": "^4.4 || ^5.1"
+        "symfony/serializer": "^4.4 || ^5.1 || ^6.1",
+        "symfony/console": "^4.4 || ^5.1 || ^6.1"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^4.4 || ^5.1",
+        "symfony/phpunit-bridge": "^4.4 || ^5.1 || ^6.1",
         "nyholm/symfony-bundle-test": "^1.6"
     },
     "autoload": {
