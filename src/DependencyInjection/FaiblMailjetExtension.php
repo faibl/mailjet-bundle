@@ -2,13 +2,11 @@
 
 namespace Faibl\MailjetBundle\DependencyInjection;
 
-use Cassandra\Map;
 use Faibl\MailjetBundle\Serializer\Normalizer\MailjetMailNormalizer;
 use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Faibl\MailjetBundle\Services\MailjetService;
 use Faibl\MailjetBundle\Services\MailjetServiceLocator;
 use Mailjet\Client;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -18,7 +16,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
 class FaiblMailjetExtension extends ConfigurableExtension
 {
-    protected function loadInternal(array $config, ContainerBuilder $container)
+    protected function loadInternal(array $config, ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
