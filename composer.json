@@ -11,13 +11,13 @@
     ],
     "require": {
         "php": ">=8.1",
-        "mailjet/mailjet-apiv3-php": "^1.5",
-        "monolog/monolog": "^1.1 || ^2.0 || ^3.0",
-        "symfony/serializer": "^4.4 || ^5.1 || ^6.1",
-        "symfony/console": "^4.4 || ^5.1 || ^6.1"
+        "mailjet/mailjet-apiv3-php": "^1.6.3",
+        "monolog/monolog": "^2.0 || ^3.0",
+        "symfony/serializer": "^5.4 || ^6.1",
+        "symfony/console": "^5.4 || ^6.1"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^4.4 || ^5.1 || ^6.1",
+        "symfony/phpunit-bridge": "^5.4 || ^6.1",
         "nyholm/symfony-bundle-test": "^2.0.0"
     },
     "autoload": {
