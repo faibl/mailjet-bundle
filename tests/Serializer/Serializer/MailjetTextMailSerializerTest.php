@@ -9,10 +9,13 @@ use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 
 class MailjetTextMailSerializerTest extends FaiblMailjetBundleTestCase
 {
+    /**
+     * @covers MailjetTextMail
+     */
     public function test_text_mail()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/default.yaml');
-        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
+        $this->initBundle('default.yaml');
+        $serializer = self::getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTextMail();
 
         $mailNormalized = $serializer->normalize($mail);
@@ -48,10 +51,14 @@ class MailjetTextMailSerializerTest extends FaiblMailjetBundleTestCase
         $this->assertEquals($expected, $mailNormalized, 'Normalize Text-Mail.');
     }
 
+    /**
+     * @covers MailjetTextMail
+     * @covers delivery addresses
+     */
     public function test_text_mail_to_delivery_address()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/delivery_addresses.yaml');
-        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
+        $this->initBundle('delivery_addresses.yaml');
+        $serializer = self::getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTextMail();
 
         $mailNormalized = $serializer->normalize($mail);
@@ -83,10 +90,14 @@ class MailjetTextMailSerializerTest extends FaiblMailjetBundleTestCase
         $this->assertEquals($expected, $mailNormalized, 'Delivery Address defined in config overrides all recipients.');
     }
 
+    /**
+     * @covers MailjetTextMail
+     * @covers multiple TextMails
+     */
     public function test_multiple_text_mails()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/default.yaml');
-        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
+        $this->initBundle('default.yaml');
+        $serializer = self::getContainer()->get('fbl_mailjet.serializer.account_1');
         $mails = [$this->getTextMail(), $this->getTextMail()];
 
         $mailNormalized = $serializer->normalize($mails);

@@ -2,37 +2,35 @@
 
 namespace Faibl\MailjetBundle\Tests;
 
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Nyholm\BundleTest\TestKernel;
 use Faibl\MailjetBundle\FaiblMailjetBundle;
-use Nyholm\BundleTest\BaseBundleTestCase;
-use Nyholm\BundleTest\CompilerPass\PublicServicePass;
+use Symfony\Component\HttpKernel\KernelInterface;
 
-class FaiblMailjetBundleTestCase extends BaseBundleTestCase
+class FaiblMailjetBundleTestCase extends KernelTestCase
 {
-    protected function getBundleClass()
+    protected static function getKernelClass(): string
     {
-        return FaiblMailjetBundle::class;
+        return TestKernel::class;
     }
 
-    protected function setUp(): void
+    protected static function createKernel(array $options = []): KernelInterface
     {
-        parent::setUp();
-        // Make services public that have an id that matches a regex
-        $this->addCompilerPass(new PublicServicePass('|Faibl\\\MailjetBundle\\\*|'));
+        /**
+         * @var TestKernel $kernel
+         */
+        $kernel = parent::createKernel($options);
+        $kernel->addTestBundle(FaiblMailjetBundle::class);
+        $kernel->handleOptions($options);
+
+        return $kernel;
     }
 
-    protected function bootFaiblMailjetBundleKernel(string $configFile = null): void
+    protected function initBundle(string $configFile): void
     {
-        self::bootKernel();
-        $kernel = $this->createKernel();
-        if ($configFile) {
-            $kernel->addConfigFile($configFile);
-        }
-
-        $this->bootKernel();
-    }
-
-    protected function getService(string $class)
-    {
-        return $this->getContainer()->get($class);
+        self::bootKernel(['config' => static function(TestKernel $kernel) use ($configFile) {
+            // Add some configuration
+            $kernel->addTestConfig(sprintf('%s/config/%s', __DIR__, $configFile));
+        }]);
     }
 }

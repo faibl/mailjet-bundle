@@ -39,9 +39,16 @@ class MailjetMailNormalizer implements NormalizerInterface
         return ArrayUtil::filterEmptyRecursive($messages);
     }
 
-    public function supportsNormalization($data, $format = null): bool
+    public function supportsNormalization($data, $format = null, array $context = []): bool
     {
         return $data instanceof MailjetMail;
+    }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+            MailjetMail::class => true
+        ];
     }
 
     private function normalizeMessageContent(MailjetMail $mail, $context): array

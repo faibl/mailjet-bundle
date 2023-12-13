@@ -7,6 +7,10 @@ use PHPUnit\Framework\TestCase;
 
 class ArrayUtilTest extends TestCase
 {
+    /**
+     * @covers ArrayUtil
+     * @covers filter empty
+     */
     public function test_filter_empty()
     {
         $array = [
@@ -29,6 +33,10 @@ class ArrayUtilTest extends TestCase
         $this->assertEquals($expected, ArrayUtil::filterEmpty($array), 'Test filter empty values from array');
     }
 
+    /**
+     * @covers ArrayUtil
+     * @covers filter empty recursive
+     */
     public function test_filter_empty_recursive()
     {
         $array = [
@@ -66,6 +74,10 @@ class ArrayUtilTest extends TestCase
         $this->assertEquals($expected, ArrayUtil::filterEmptyRecursive($array), 'Test filter empty values from nested array');
     }
 
+    /**
+     * @covers ArrayUtil
+     * @covers string to array
+     */
     public function test_string_to_array()
     {
         $this->assertEquals([], ArrayUtil::stringToArray(null), 'Test null converted to empty array');

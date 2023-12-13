@@ -8,10 +8,13 @@ use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 
 class MailjetTextMailSerializerSandboxModeTest extends FaiblMailjetBundleTestCase
 {
+    /**
+     * @covers MailjetTextMail
+     */
     public function test_text_mail()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/default.yaml');
-        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
+        $this->initBundle('default.yaml');
+        $serializer = self::getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTextMail();
 
         $mailNormalized = $serializer->normalize($mail);

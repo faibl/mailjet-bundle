@@ -13,10 +13,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(
+    name: 'fbl:mailjet:test',
+    description: 'Sends testmail through MailJet',
+    hidden: false
+)]
 class TestCommand extends Command
 {
-    protected static $defaultName = 'fbl:mailjet:test';
     private ?SymfonyStyle $io = null;
     private MailjetServiceLocator $mailjetServiceLocator;
 
@@ -29,7 +34,6 @@ class TestCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Sends testmail through MailJet')
             ->addArgument('account', InputArgument::REQUIRED, 'Account to send by')
             ->addArgument('type', InputArgument::OPTIONAL, 'Type of mail. Options are text or template', 'text')
             ->addOption('receiver', null, InputOption::VALUE_REQUIRED, 'Email address of receiver', null)

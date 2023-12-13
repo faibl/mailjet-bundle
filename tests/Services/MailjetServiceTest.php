@@ -8,10 +8,14 @@ use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 
 class MailjetServiceTest extends FaiblMailjetBundleTestCase
 {
+    /**
+     * @covers MailjetService
+     * @covers delivery disabled
+     */
     public function test_delivery_disabled()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../config/delivery_disabled.yaml');
-        $mailjetService = $this->getContainer()->get('fbl_mailjet.service.account_1');
+        $this->initBundle('delivery_disabled.yaml');
+        $mailjetService = self::getContainer()->get('fbl_mailjet.service.account_1');
         $mail = $this->getTextMail();
 
         $success = $mailjetService->send($mail);
@@ -19,10 +23,14 @@ class MailjetServiceTest extends FaiblMailjetBundleTestCase
         $this->assertSame(null, $success, 'Test');
     }
 
+    /**
+     * @covers MailjetService
+     * @covers delivery disabled by default
+     */
     public function test_delivery_disabled_by_default()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../config/delivery_disabled_by_default.yaml');
-        $mailjetService = $this->getContainer()->get('fbl_mailjet.service.account_1');
+        $this->initBundle('delivery_disabled_by_default.yaml');
+        $mailjetService = self::getContainer()->get('fbl_mailjet.service.account_1');
         $mail = $this->getTextMail();
 
         $success = $mailjetService->send($mail);

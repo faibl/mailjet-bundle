@@ -8,10 +8,13 @@ use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 
 class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
 {
+    /**
+     * @covers MailjetTemplateMail
+     */
     public function test_template_mail()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/default.yaml');
-        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
+        $this->initBundle('default.yaml');
+        $serializer = self::getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTemplateMail();
         $mailNormalized = $serializer->normalize($mail);
 
@@ -41,10 +44,14 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
         $this->assertEquals($expected, $mailNormalized, 'Normalize Template-Mail.');
     }
 
+    /**
+     * @covers MailjetTextMail
+     * @covers delivery_addresses
+     */
     public function test_text_mail_to_delivery_addresses()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/delivery_addresses.yaml');
-        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
+        $this->initBundle('delivery_addresses.yaml');
+        $serializer = self::getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTemplateMail();
         $mailNormalized = $serializer->normalize($mail);
 
@@ -70,10 +77,14 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
         $this->assertEquals($expected, $mailNormalized, 'Delivery Address defined in config overrides all recipients.');
     }
 
+    /**
+     * @covers MailjetTextMail
+     * @covers delivery addresses by default
+     */
     public function test_text_mail_to_delivery_addresses_by_default()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__ . '/../../config/delivery_addresses_by_default.yaml');
-        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
+        $this->initBundle('delivery_addresses_by_default.yaml');
+        $serializer = self::getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTemplateMail();
         $mailNormalized = $serializer->normalize($mail);
 
@@ -99,10 +110,14 @@ class MailjetTemplateMailSerializerTest extends FaiblMailjetBundleTestCase
         $this->assertEquals($expected, $mailNormalized, 'Delivery Address defined in config overrides all recipients.');
     }
 
+    /**
+     * @covers MailjetTemplateMail
+     * @covers multiple
+     */
     public function test_multiple_template_mail()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/default.yaml');
-        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
+        $this->initBundle('default.yaml');
+        $serializer = self::getContainer()->get('fbl_mailjet.serializer.account_1');
         $mails = [
             $this->getTemplateMail(),
             $this->getTemplateMail()

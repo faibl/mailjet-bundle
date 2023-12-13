@@ -10,10 +10,14 @@ use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 
 class MailjetTextMailSerializerMultipleReceiverTest extends FaiblMailjetBundleTestCase
 {
+    /**
+     * @covers MailjetTextMail
+     * @covers multiple receivers
+     */
     public function test_text_mail_multiple_receiver()
     {
-        $this->bootFaiblMailjetBundleKernel(__DIR__.'/../../config/default.yaml');
-        $serializer = $this->getContainer()->get('fbl_mailjet.serializer.account_1');
+        $this->initBundle('default.yaml');
+        $serializer = self::getContainer()->get('fbl_mailjet.serializer.account_1');
         $mail = $this->getTextMailMultipleReceiver();
 
         $mailNormalized = $serializer->normalize($mail);
