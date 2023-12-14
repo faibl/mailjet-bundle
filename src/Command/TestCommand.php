@@ -91,8 +91,8 @@ class TestCommand extends Command
     private function sendTestTextMail(string $account, string $receiver, string $sender): ?bool
     {
         $mail = (new MailjetTextMail())
-            ->setSender((new MailjetAddress($sender)))
-            ->addReceiver((new MailjetAddress($receiver)))
+            ->setSender(new MailjetAddress($sender))
+            ->addReceiver(new MailjetAddress($receiver))
             ->setSubject('Testmail send by faibl-mailjet-bundle')
             ->setTextPart('Nothing to say...');
 
@@ -102,7 +102,7 @@ class TestCommand extends Command
     private function sendTemplateMail(string $account, string $receiver, int $templateId): ?bool
     {
         $mail = (new MailjetTemplateMail($templateId))
-            ->addReceiver((new MailjetAddress($receiver)));
+            ->addReceiver(new MailjetAddress($receiver));
 
         return $this->mailjetServiceLocator->send($account, $mail);
     }

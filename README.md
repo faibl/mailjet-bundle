@@ -34,8 +34,7 @@ faibl_mailjet:
         secret: mailjet_secret_2
   receiver_errors: 'error_address@mail.de'
   delivery_addresses: ['delivery_address1@mail.de', 'delivery_address2@mail.de']
-  delivery_enabled: true
-        
+  delivery_enabled: true        
 ```
 
 ### Config explained:
@@ -63,7 +62,48 @@ faibl_mailjet:
   delivery_enabedl: false
   ## Override delivery-address for all mailings. Mailings will only be send to this address
   delivery_addresses: ['delivery_address1@mail.de', 'delivery_address2@mail.de']
-        
+```
+
+### Test you configuration or template by sending test-mail
+```
+bin/console fbl:mailjet:test account_1 text --sender=sender@mail.de --receiver=yourname@mail.de
+bin/console fbl:mailjet:test account_1 template --template-id=12345 --receiver=yourname@mail.de
+```
+
+## Inject service
+### ServiceLocator
+```
+public function __construct(
+  private readonly MailjetServiceLocator $mailjetServiceLocator
+) {
+}
+```
+Or inject your specific service directly by its service-id `fbl_mailjet.service.account_1`
+
+
+## Send Mails
+### Text Mails
+```
+$sender = new MailjetAddress('sender@mail.de', 'Optiopnal Name');
+$receiver = new MailjetAddress('reveiver@mail.de', 'Optiopnal Name');
+
+$mail = (new MailjetTextMail())
+    ->setSender($sender)
+    ->addReceiver($receiver)
+    ->setSubject('Testmail send by faibl-mailjet-bundle')
+    ->setTextPart('Nothing to say...');
+
+$success = $this->mailjetServiceLocator->send('account_1', $mail);
+```
+
+### Template Mail
+```
+$receiver = new MailjetAddress('reveiver@mail.de', 'Optiopnal Name');
+
+$mail = (new MailjetTemplateMail($templateId))
+    ->addReceiver($receiver);
+
+$success = $this->mailjetServiceLocator->send('account_2', $mail);
 ```
 
 ## Run Tests
