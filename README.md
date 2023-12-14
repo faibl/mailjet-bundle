@@ -106,6 +106,13 @@ $mail = (new MailjetTemplateMail($templateId))
 $success = $this->mailjetServiceLocator->send('account_2', $mail);
 ```
 
+#### Send in SandboxMode
+Calls Api, gets response but does not send mail
+```
+...
+$success = $this->mailjetServiceLocator->send('account_1', $mail, true);
+```
+
 ## Run Tests
 ```
 php vendor/bin/simple-phpunit

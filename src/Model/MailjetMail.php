@@ -8,7 +8,6 @@ class MailjetMail
     private array $receiversCc = [];
     private array $receiversBcc = [];
     private array $attachments = [];
-    private bool $sandboxMode = false;
 
     public function isReceiver(MailjetAddress $receiver): bool
     {
@@ -116,17 +115,5 @@ class MailjetMail
     public function getAttachments(): array
     {
         return $this->attachments;
-    }
-
-    public function isSandboxMode(): bool
-    {
-        return $this->sandboxMode;
-    }
-
-    public function setSandboxMode(bool $sandboxMode): static
-    {
-        $this->sandboxMode = $sandboxMode;
-
-        return $this;
     }
 }

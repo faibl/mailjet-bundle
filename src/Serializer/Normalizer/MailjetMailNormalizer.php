@@ -32,8 +32,7 @@ class MailjetMailNormalizer implements NormalizerInterface
 
         $messages = array_merge(
             $this->normalizeMessageBase($object),
-            $this->normalizeMessageContent($object, $context),
-            $this->normalizeSandboxMode($object)
+            $this->normalizeMessageContent($object, $context)
         );
 
         return ArrayUtil::filterEmptyRecursive($messages);
@@ -113,11 +112,6 @@ class MailjetMailNormalizer implements NormalizerInterface
             // if delivery_addresses is set, override all other receivers
             'To' => $this->normalizeAddressCollection(new MailjetAddressCollection($this->deliveryAddresses)),
         ];
-    }
-
-    private function normalizeSandboxMode(MailjetMail $mail): array
-    {
-        return $mail->isSandboxMode() ? ['SandboxMode' => true] : [];
     }
 
     private function normalizeAddressCollection(MailjetAddressCollection $collection): array

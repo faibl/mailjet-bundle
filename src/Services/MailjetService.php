@@ -3,6 +3,7 @@
 namespace Faibl\MailjetBundle\Services;
 
 use Faibl\MailjetBundle\Exception\MailjetException;
+use Faibl\MailjetBundle\Model\MailjetContactToList;
 use Faibl\MailjetBundle\Model\MailjetMail;
 use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Mailjet\Client;
@@ -19,36 +20,45 @@ class MailjetService
     ) {
     }
 
-    public function send(MailjetMail $mail): ?bool
+    public function send(MailjetMail $mail, bool $sandboxMode = false): ?bool
     {
-        $messages = $this->serializer->normalize($mail);
+        $message = $this->serializer->normalize($mail);
 
-        $content = [
-            'body' => [
-                'Messages' => [$messages]
-            ]
+        $body = [
+            'Messages' => [$message],
+            'SandboxMode' => $sandboxMode,
         ];
 
-        $response = $this->client->post(Resources::$Email, $content);
+        $response = $this->client->post(Resources::$Email, ['body' => $body]);
 
-        $this->logErrors($response, $content);
+        $this->logErrors($response, $body);
 
         return $response->success();
     }
 
-    public function sendBulk(array $mails): ?bool
+    public function sendBulk(array $mails, bool $sandboxMode = false): ?bool
     {
         $messages = $this->serializer->normalize($mails);
 
-        $content = [
-            'body' => [
-                'Messages' => $messages
-            ]
+        $body = [
+            'Messages' => $messages,
+            'SandboxMode' => $sandboxMode,
         ];
 
-        $response = $this->client->post(Resources::$Email, $content);
+        $response = $this->client->post(Resources::$Email, ['body' => $body]);
 
-        $this->logErrors($response, $content);
+        $this->logErrors($response, $body);
+
+        return $response->success();
+    }
+
+    public function createContactAndAddToList(MailjetContactToList $contactToList): ?bool
+    {
+        $body = $this->serializer->normalize($contactToList);
+
+        $response = $this->client->post(Resources::$ContactManagecontactslists, ['id' => $contactToList->getListId(), 'body' => $body]);
+
+        $this->logErrors($response, array_merge(['id' => $contactToList->getListId()], $body));
 
         return $response->success();
     }
