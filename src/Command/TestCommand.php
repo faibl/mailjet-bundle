@@ -28,7 +28,7 @@ class TestCommand extends Command
     public function __construct(MailjetServiceLocator $mailjetServiceLocator)
     {
         $this->mailjetServiceLocator = $mailjetServiceLocator;
-        parent::__construct($this::$defaultName);
+        parent::__construct();
     }
 
     protected function configure(): void
