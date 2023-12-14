@@ -8,10 +8,6 @@ use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 
 class MailjetServiceTest extends FaiblMailjetBundleTestCase
 {
-    /**
-     * @covers MailjetService
-     * @covers delivery disabled
-     */
     public function test_delivery_disabled()
     {
         $this->initBundle('delivery_disabled.yaml');
@@ -23,10 +19,6 @@ class MailjetServiceTest extends FaiblMailjetBundleTestCase
         $this->assertSame(null, $success, 'Test');
     }
 
-    /**
-     * @covers MailjetService
-     * @covers delivery disabled by default
-     */
     public function test_delivery_disabled_by_default()
     {
         $this->initBundle('delivery_disabled_by_default.yaml');

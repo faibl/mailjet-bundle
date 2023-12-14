@@ -2,6 +2,7 @@
 
 namespace Faibl\MailjetBundle\DependencyInjection;
 
+use Faibl\MailjetBundle\Serializer\Normalizer\MailjetContactToListNormalizer;
 use Faibl\MailjetBundle\Serializer\Normalizer\MailjetMailNormalizer;
 use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Faibl\MailjetBundle\Services\MailjetService;
@@ -20,6 +21,8 @@ class FaiblMailjetExtension extends ConfigurableExtension
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+
+        $container->setDefinition(MailjetContactToListNormalizer::class, new Definition(MailjetContactToListNormalizer::class));
 
         foreach ($config['accounts'] as $name => $accountConfig) {
             $this->registerServices(
@@ -58,7 +61,8 @@ class FaiblMailjetExtension extends ConfigurableExtension
         $serializerId = sprintf('fbl_mailjet.serializer.%s', $name);
         $serializer = (new Definition(MailjetMailSerializer::class))
             ->setArgument(0, new Reference($normalizerId))
-            ->setArgument(1, new Reference('serializer.encoder.json'))
+            ->setArgument(1, new Reference(MailjetContactToListNormalizer::class))
+            ->setArgument(2, new Reference('serializer.encoder.json'))
             ->setPublic(true);
         $container->setDefinition($serializerId, $serializer);
 

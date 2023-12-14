@@ -17,9 +17,11 @@ class MailjetContactToList extends MailjetContact
         return $this->listId;
     }
 
-    public function setListId(?int $listId): void
+    public function setListId(?int $listId): static
     {
         $this->listId = $listId;
+
+        return $this;
     }
 
     public function getAction(): ?string
@@ -27,8 +29,10 @@ class MailjetContactToList extends MailjetContact
         return $this->action;
     }
 
-    public function setAction(?string $action): void
+    public function setAction(?string $action): static
     {
         $this->action = $action;
+
+        return $this;
     }
 }

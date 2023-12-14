@@ -13,9 +13,11 @@ class MailjetContact
         return $this->email;
     }
 
-    public function setEmail(?string $email): void
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -23,9 +25,11 @@ class MailjetContact
         return $this->name;
     }
 
-    public function setName(?string $name): void
+    public function setName(?string $name): static
     {
         $this->name = $name;
+
+        return $this;
     }
 
     public function getCustomProperties(): array
@@ -33,9 +37,11 @@ class MailjetContact
         return $this->customProperties;
     }
 
-    public function setCustomProperties(array $customProperties): void
+    public function setCustomProperties(array $customProperties): static
     {
         $this->customProperties = $customProperties;
+
+        return $this;
     }
 
     public function addCustomProperty(string $key, mixed $value): void
