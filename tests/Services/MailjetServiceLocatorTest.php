@@ -5,43 +5,36 @@ namespace Faibl\MailjetBundle\Tests\Services;
 use Faibl\MailjetBundle\Services\MailjetService;
 use Faibl\MailjetBundle\Services\MailjetServiceLocator;
 use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
+use Faibl\MailjetBundle\Tests\FixturesUtil;
 
 class MailjetServiceLocatorTest extends FaiblMailjetBundleTestCase
 {
-    /**
-     * @covers MailjetServiceLocator
-     */
-    public function test_service_getter()
+    public function test_multiple_services()
     {
         $this->initBundle('multiple_accounts.yaml');
+
+        $service1Mock = $this->createMock(MailjetService::class);
+        $service1Mock->expects($this->once())
+            ->method('send')
+            ->with(
+                $this->anything()
+            );
+
+        self::getContainer()->set('fbl_mailjet.service.account_1', $service1Mock);
+
+        $service2Mock = $this->createMock(MailjetService::class);
+        $service2Mock->expects($this->never())
+            ->method('send')
+            ->with(
+                $this->anything()
+            );
+
+        self::getContainer()->set('fbl_mailjet.service.account_2', $service2Mock);
+
         /** @var MailjetServiceLocator $mailjetServiceFactory */
         $mailjetServiceFactory = self::getContainer()->get(MailjetServiceLocator::class);
+        $mail = FixturesUtil::textMail();
 
-        $mailjetService1_1 = $mailjetServiceFactory->getService('account_1');
-        $mailjetService1_2 = self::getContainer()->get('fbl_mailjet.service.account_1');
-
-        $mailjetService2_1 = $mailjetServiceFactory->getService('account_2');
-        $mailjetService2_2 = self::getContainer()->get('fbl_mailjet.service.account_2');
-
-        $this->assertInstanceOf(MailjetService::class, $mailjetService1_1);
-        $this->assertInstanceOf(MailjetService::class, $mailjetService2_1);
-
-        $this->assertSame($mailjetService1_1, $mailjetService1_2);
-        $this->assertSame($mailjetService2_1, $mailjetService2_2);
-
-        $this->assertNotSame($mailjetService1_1, $mailjetService2_1);
+        $mailjetServiceFactory->send('account_1', $mail);
     }
-
-    //public function test_unknown_service()
-    //{
-    //    $this->initBundle('multiple_accounts.yaml');
-    //    /** @var MailjetServiceLocator $mailjetServiceFactory */
-    //    $mailjetServiceFactory = self::getContainer()->get(MailjetServiceLocator::class);
-    //
-    //    $unknownService = $mailjetServiceFactory->getService('account_3');
-    //    $this->assertEquals(null, $unknownService);
-    //
-    //    $this->expectException('Exception');
-    //    $mailjetServiceFactory->send('account_3', new MailjetTextMail());
-    //}
  }
