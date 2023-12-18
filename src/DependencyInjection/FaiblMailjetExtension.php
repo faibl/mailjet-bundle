@@ -47,7 +47,6 @@ class FaiblMailjetExtension extends ConfigurableExtension
             ->setArgument(0, $config['api']['key'])
             ->setArgument(1, $config['api']['secret'])
             ->setArgument(2, $config['delivery_enabled']) // this prevents api to call mailjet
-            ->setArgument(3, ['version' => sprintf('v%s', $config['api']['version'])])
             ->setPublic(true);
         $container->setDefinition($clientId, $client);
 

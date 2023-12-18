@@ -26,6 +26,6 @@ class FixturesUtil
                 'property_1' => 'value_1',
                 'property_2' => 'value_2',
             ])
-            ->setAction(MailjetContactToList::ACTION_ADD_FORCE);
+            ->setAction(MailjetContactToList::ACTION_ADD_NO_FORCE);
     }
  }

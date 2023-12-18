@@ -2,7 +2,6 @@
 
 namespace Faibl\MailjetBundle\Tests\Services;
 
-use Faibl\MailjetBundle\Model\MailjetContactToList;
 use Faibl\MailjetBundle\Services\MailjetService;
 use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 use Faibl\MailjetBundle\Tests\FixturesUtil;
@@ -20,7 +19,7 @@ class MailjetServiceContactToListTest extends FaiblMailjetBundleTestCase
                     'property_1' => 'value_1',
                     'property_2' => 'value_2',
                 ],
-                'Action' => 'addforce',
+                'Action' => 'addnoforce',
                 'Email' => 'new_contact@mail.de',
             ],
         ];
@@ -31,7 +30,7 @@ class MailjetServiceContactToListTest extends FaiblMailjetBundleTestCase
         $clientMock->expects($this->once())
             ->method('post')
             ->with(
-                $this->equalTo(['contact', 'managecontactslists']),
+                $this->equalTo(['contactslist', 'ManageContact']),
                 $this->equalTo($expected)
             );
 

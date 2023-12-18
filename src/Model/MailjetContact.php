@@ -44,8 +44,10 @@ class MailjetContact
         return $this;
     }
 
-    public function addCustomProperty(string $key, mixed $value): void
+    public function addCustomProperty(string $key, mixed $value): static
     {
         $this->customProperties[$key] = $value;
+
+        return $this;
     }
 }

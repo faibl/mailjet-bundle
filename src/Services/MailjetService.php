@@ -29,7 +29,7 @@ class MailjetService
             'SandboxMode' => $sandboxMode,
         ];
 
-        $response = $this->client->post(Resources::$Email, ['body' => $body]);
+        $response = $this->client->post(Resources::$Email, ['body' => $body], ['version' => 'v3.1']);
 
         $this->logErrors($response, $body);
 
@@ -45,7 +45,7 @@ class MailjetService
             'SandboxMode' => $sandboxMode,
         ];
 
-        $response = $this->client->post(Resources::$Email, ['body' => $body]);
+        $response = $this->client->post(Resources::$Email, ['body' => $body], ['version' => 'v3.1']);
 
         $this->logErrors($response, $body);
 
@@ -56,7 +56,7 @@ class MailjetService
     {
         $body = $this->serializer->normalize($contactToList);
 
-        $response = $this->client->post(Resources::$ContactManagecontactslists, ['id' => $contactToList->getListId(), 'body' => $body]);
+        $response = $this->client->post(Resources::$ContactslistManagecontact, ['id' => $contactToList->getListId(), 'body' => $body], ['version' => 'v3']);
 
         $this->logErrors($response, array_merge(['id' => $contactToList->getListId()], $body));
 
