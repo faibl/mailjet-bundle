@@ -46,7 +46,7 @@ class FaiblMailjetExtension extends ConfigurableExtension
         $client = (new Definition(Client::class))
             ->setArgument(0, $config['api']['key'])
             ->setArgument(1, $config['api']['secret'])
-            ->setArgument(2, $config['delivery_enabled']) // this prevents api to call mailjet
+            ->setArgument(2, $config['delivery_enabled']) // prevents client to actually call mailjet
             ->setPublic(true);
         $container->setDefinition($clientId, $client);
 
@@ -70,6 +70,7 @@ class FaiblMailjetExtension extends ConfigurableExtension
             ->setArgument(0, new Reference($clientId))
             ->setArgument(1, new Reference($serializerId))
             ->setArgument(2, new Reference($config['logger']))
+            ->setArgument(3, $config['delivery_enabled']) // disable all calls to mailjet, this needs to be set in client and service
             ->setPublic(true);
         $container->setDefinition($serviceId, $service);
 

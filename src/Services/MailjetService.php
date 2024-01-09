@@ -14,9 +14,10 @@ use Psr\Log\LoggerInterface;
 class MailjetService
 {
     public function __construct(
-        private Client $client,
-        private MailjetMailSerializer $serializer,
-        private LoggerInterface $logger
+        private readonly Client $client,
+        private readonly MailjetMailSerializer $serializer,
+        private readonly LoggerInterface $logger,
+        private readonly bool $deliveryEnabled
     ) {
     }
 
@@ -29,7 +30,10 @@ class MailjetService
             'SandboxMode' => $sandboxMode,
         ];
 
-        $response = $this->client->post(Resources::$Email, ['body' => $body], ['version' => 'v3.1']);
+        $response = $this->client->post(Resources::$Email, ['body' => $body], [
+            'version' => 'v3.1',
+            'call' => $this->deliveryEnabled,
+        ]);
 
         $this->logErrors($response, $body);
 
@@ -45,7 +49,10 @@ class MailjetService
             'SandboxMode' => $sandboxMode,
         ];
 
-        $response = $this->client->post(Resources::$Email, ['body' => $body], ['version' => 'v3.1']);
+        $response = $this->client->post(Resources::$Email, ['body' => $body], [
+            'version' => 'v3.1',
+            'call' => $this->deliveryEnabled,
+        ]);
 
         $this->logErrors($response, $body);
 
@@ -56,7 +63,10 @@ class MailjetService
     {
         $body = $this->serializer->normalize($contactToList);
 
-        $response = $this->client->post(Resources::$ContactslistManagecontact, ['id' => $contactToList->getListId(), 'body' => $body], ['version' => 'v3']);
+        $response = $this->client->post(Resources::$ContactslistManagecontact, ['id' => $contactToList->getListId(), 'body' => $body], [
+            'version' => 'v3',
+            'call' => $this->deliveryEnabled,
+        ]);
 
         $this->logErrors($response, array_merge(['id' => $contactToList->getListId()], $body));
 

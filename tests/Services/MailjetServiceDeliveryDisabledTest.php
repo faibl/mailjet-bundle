@@ -2,8 +2,6 @@
 
 namespace Faibl\MailjetBundle\Tests\Services;
 
-use Faibl\MailjetBundle\Model\MailjetAddress;
-use Faibl\MailjetBundle\Model\MailjetTextMail;
 use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 use Faibl\MailjetBundle\Tests\FixturesUtil;
 use Faibl\MailjetBundle\Tests\ReflectionUtil;
