@@ -24,7 +24,7 @@ class MailjetMailNormalizer implements NormalizerInterface
         $this->deliveryAddresses = ArrayUtil::stringToArray($deliveryAddresses);
     }
 
-    public function normalize($object, $format = null, array $context = []): ?array
+    public function normalize(mixed $object, string $format = null, array $context = []): ?array
     {
         if (!$object instanceof MailjetMail) {
             return null;
