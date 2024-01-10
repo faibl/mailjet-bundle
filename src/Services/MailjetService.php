@@ -3,7 +3,8 @@
 namespace Faibl\MailjetBundle\Services;
 
 use Faibl\MailjetBundle\Exception\MailjetException;
-use Faibl\MailjetBundle\Model\MailjetContactToList;
+use Faibl\MailjetBundle\Model\MailjetContactCreateAndSubscribe;
+use Faibl\MailjetBundle\Model\MailjetContactUnsubscribe;
 use Faibl\MailjetBundle\Model\MailjetMail;
 use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Mailjet\Client;
@@ -59,16 +60,30 @@ class MailjetService
         return $response->success();
     }
 
-    public function createContactAndAddToList(MailjetContactToList $contactToList): ?bool
+    public function contactCreateAndSubscribe(MailjetContactCreateAndSubscribe $contactCreateAndSubscribe): ?bool
     {
-        $body = $this->serializer->normalize($contactToList);
+        $body = $this->serializer->normalize($contactCreateAndSubscribe);
 
-        $response = $this->client->post(Resources::$ContactslistManagecontact, ['id' => $contactToList->getListId(), 'body' => $body], [
+        $response = $this->client->post(Resources::$ContactslistManagecontact, ['id' => $contactCreateAndSubscribe->getListId(), 'body' => $body], [
             'version' => 'v3',
             'call' => $this->deliveryEnabled,
         ]);
 
-        $this->logErrors($response, array_merge(['id' => $contactToList->getListId()], $body));
+        $this->logErrors($response, array_merge(['id' => $contactCreateAndSubscribe->getListId()], $body));
+
+        return $response->success();
+    }
+
+    public function contactUnsubscribe(MailjetContactUnsubscribe $contactUnsubscribe): ?bool
+    {
+        $body = $this->serializer->normalize($contactUnsubscribe);
+
+        $response = $this->client->post(Resources::$Listrecipient, ['id' => $contactUnsubscribe->getListId(), 'body' => $body], [
+            'version' => 'v3',
+            'call' => $this->deliveryEnabled,
+        ]);
+
+        $this->logErrors($response, array_merge(['id' => $contactUnsubscribe->getListId()], $body));
 
         return $response->success();
     }
