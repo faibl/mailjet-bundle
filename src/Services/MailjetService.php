@@ -3,6 +3,8 @@
 namespace Faibl\MailjetBundle\Services;
 
 use Faibl\MailjetBundle\Exception\MailjetException;
+use Faibl\MailjetBundle\Model\MailjetContactlistItemUpdate;
+use Faibl\MailjetBundle\Model\MailjetContactUnsubscribe;
 use Faibl\MailjetBundle\Model\MailjetMail;
 use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Mailjet\Client;
@@ -13,42 +15,61 @@ use Psr\Log\LoggerInterface;
 class MailjetService
 {
     public function __construct(
-        private Client $client,
-        private MailjetMailSerializer $serializer,
-        private LoggerInterface $logger
+        private readonly Client $client,
+        private readonly MailjetMailSerializer $serializer,
+        private readonly LoggerInterface $logger,
+        private readonly bool $deliveryEnabled
     ) {
     }
 
-    public function send(MailjetMail $mail): ?bool
+    public function send(MailjetMail $mail, bool $sandboxMode = false): ?bool
     {
-        $messages = $this->serializer->normalize($mail);
+        $message = $this->serializer->normalize($mail);
 
-        $content = [
-            'body' => [
-                'Messages' => [$messages]
-            ]
+        $body = [
+            'Messages' => [$message],
+            'SandboxMode' => $sandboxMode,
         ];
 
-        $response = $this->client->post(Resources::$Email, $content);
+        $response = $this->client->post(Resources::$Email, ['body' => $body], [
+            'version' => 'v3.1',
+            'call' => $this->deliveryEnabled,
+        ]);
 
-        $this->logErrors($response, $content);
+        $this->logErrors($response, $body);
 
         return $response->success();
     }
 
-    public function sendBulk(array $mails): ?bool
+    public function sendBulk(array $mails, bool $sandboxMode = false): ?bool
     {
         $messages = $this->serializer->normalize($mails);
 
-        $content = [
-            'body' => [
-                'Messages' => $messages
-            ]
+        $body = [
+            'Messages' => $messages,
+            'SandboxMode' => $sandboxMode,
         ];
 
-        $response = $this->client->post(Resources::$Email, $content);
+        $response = $this->client->post(Resources::$Email, ['body' => $body], [
+            'version' => 'v3.1',
+            'call' => $this->deliveryEnabled,
+        ]);
 
-        $this->logErrors($response, $content);
+        $this->logErrors($response, $body);
+
+        return $response->success();
+    }
+
+    public function contactlistItemUpdate(MailjetContactlistItemUpdate $contactlistItemUpdate): ?bool
+    {
+        $body = $this->serializer->normalize($contactlistItemUpdate);
+
+        $response = $this->client->post(Resources::$ContactslistManagecontact, ['id' => $contactlistItemUpdate->getListId(), 'body' => $body], [
+            'version' => 'v3',
+            'call' => $this->deliveryEnabled,
+        ]);
+
+        $this->logErrors($response, array_merge(['id' => $contactlistItemUpdate->getListId()], $body));
 
         return $response->success();
     }

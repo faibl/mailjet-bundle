@@ -24,12 +24,10 @@ faibl_mailjet:
   accounts:
     account_1:
       api:
-        version: 3.1
         key: mailjet_key_1
         secret: mailjet_secret_1
     account_2:
       api:
-        version: 3.1
         key: mailjet_key_2
         secret: mailjet_secret_2
   receiver_errors: 'error_address@mail.de'
@@ -44,12 +42,10 @@ faibl_mailjet:
     ## Array of mailjet-accounts. 
     account_1:
       api:
-        version: 3.1
         key: mailjet_key_1
         secret: mailjet_secret_1
     account_2:
       api:
-        version: 3.1
         key: mailjet_key_2
         secret: mailjet_secret_2
 
@@ -104,6 +100,44 @@ $mail = (new MailjetTemplateMail($templateId))
     ->addReceiver($receiver);
 
 $success = $this->mailjetServiceLocator->send('account_2', $mail);
+```
+
+#### Send in SandboxMode
+Calls Api, gets response but does not send mail
+```
+$success = $this->mailjetServiceLocator->send('account_1', $mail, true);
+```
+
+## Update Contactlist Entry
+### Using Service
+#### Subscribe or Update
+```
+$contactlistItemUpdate = new MailjetContactlistItemUpdate())
+    ->setListId(12345)
+    ->setEmail('new_contact@mail.de')
+    ->setName('Contact New')
+    ->setCustomProperties([
+        'property_1' => 'value_1',
+        'property_2' => 'value_2',
+    ])
+    ->setAction(MailjetContactlistItemUpdate::ACTION_ADD_NO_FORCE);
+
+$success = $this->mailjetService->contactlistItemUpdate($contactlistItemUpdate);
+```
+
+#### Unsubscribe
+```
+$contactlistItemUpdate = new MailjetContactlistItemUpdate())
+    ->setListId(12345)
+    ->setEmail('new_contact@mail.de')
+    ->setAction(MailjetContactlistItemUpdate::ACTION_UNSUBSCRIBE);
+
+$success = $this->mailjetService->contactlistItemUpdate($contactlistItemUpdate);
+```
+
+### Using ServiceLocator
+```
+$this->mailjetServiceLocator->contactlistItemUpdate('account_1', $contactlistItemUpdate);
 ```
 
 ## Run Tests

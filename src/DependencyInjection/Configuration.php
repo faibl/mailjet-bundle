@@ -19,7 +19,6 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->arrayNode('api')
                                 ->children()
-                                    ->floatNode('version')->defaultValue('3.1')->end()
                                     ->scalarNode('key')->isRequired()->cannotBeEmpty()->end()
                                     ->scalarNode('secret')->isRequired()->cannotBeEmpty()->end()
                                 ->end()

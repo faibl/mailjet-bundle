@@ -2,6 +2,7 @@
 
 namespace Faibl\MailjetBundle\Services;
 
+use Faibl\MailjetBundle\Model\MailjetContactlistItemUpdate;
 use Faibl\MailjetBundle\Model\MailjetMail;
 
 class MailjetServiceLocator
@@ -18,7 +19,7 @@ class MailjetServiceLocator
         return $this->services[$name];
     }
 
-    public function send(string $name, MailjetMail $mail): ?bool
+    public function send(string $name, MailjetMail $mail, bool $sandboxMode = false): ?bool
     {
         $service = $this->getService($name);
 
@@ -26,10 +27,10 @@ class MailjetServiceLocator
             throw new \Exception(sprintf('Unknown account %s. Please check your config.', $name));
         }
 
-        return $service->send($mail);
+        return $service->send($mail, $sandboxMode);
     }
 
-    public function sendBulk(string $name, array $mails): ?bool
+    public function sendBulk(string $name, array $mails, bool $sandboxMode = false): ?bool
     {
         $service = $this->getService($name);
 
@@ -37,6 +38,17 @@ class MailjetServiceLocator
             throw new \Exception(sprintf('Unknown account %s. Please check your config.', $name));
         }
 
-        return $service->sendBulk($mails);
+        return $service->sendBulk($mails, $sandboxMode);
+    }
+
+    public function contactlistItemUpdate(string $name, MailjetContactlistItemUpdate $contactlistItemUpdate): ?bool
+    {
+        $service = $this->getService($name);
+
+        if (!$service) {
+            throw new \Exception(sprintf('Unknown account %s. Please check your config.', $name));
+        }
+
+        return $service->contactlistItemUpdate($contactlistItemUpdate);
     }
 }
