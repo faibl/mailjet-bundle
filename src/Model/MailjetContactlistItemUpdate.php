@@ -2,7 +2,7 @@
 
 namespace Faibl\MailjetBundle\Model;
 
-class MailjetContactCreateAndSubscribe extends MailjetContact
+class MailjetContactlistItemUpdate extends MailjetContact
 {
     public CONST ACTION_ADD_FORCE = 'addforce';
     public CONST ACTION_ADD_NO_FORCE = 'addnoforce';

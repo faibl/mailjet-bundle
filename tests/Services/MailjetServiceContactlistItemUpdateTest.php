@@ -7,7 +7,7 @@ use Faibl\MailjetBundle\Tests\FaiblMailjetBundleTestCase;
 use Faibl\MailjetBundle\Tests\FixturesUtil;
 use Mailjet\Client;
 
-class MailjetServiceContactCreateAndSubscribeTest extends FaiblMailjetBundleTestCase
+class MailjetServiceContactlistItemUpdateTest extends FaiblMailjetBundleTestCase
 {
     public function test()
     {
@@ -38,8 +38,8 @@ class MailjetServiceContactCreateAndSubscribeTest extends FaiblMailjetBundleTest
 
         /** @var MailjetService $mailjetService */
         $mailjetService = self::getContainer()->get('fbl_mailjet.service.account_1');
-        $contactCreateAndSubscribe = FixturesUtil::contactCreateAndSubscribe();
+        $contactCreateAndSubscribe = FixturesUtil::contactlistItemUpdate();
 
-        $mailjetService->contactCreateAndSubscribe($contactCreateAndSubscribe);
+        $mailjetService->contactlistItemUpdate($contactCreateAndSubscribe);
     }
  }

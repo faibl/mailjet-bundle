@@ -3,8 +3,7 @@
 namespace Faibl\MailjetBundle\Tests;
 
 use Faibl\MailjetBundle\Model\MailjetAddress;
-use Faibl\MailjetBundle\Model\MailjetContactCreateAndSubscribe;
-use Faibl\MailjetBundle\Model\MailjetContactUnsubscribe;
+use Faibl\MailjetBundle\Model\MailjetContactlistItemUpdate;
 use Faibl\MailjetBundle\Model\MailjetTextMail;
 
 class FixturesUtil
@@ -17,9 +16,9 @@ class FixturesUtil
             ->setTextPart('TEXT');
     }
 
-    public static function contactCreateAndSubscribe(): MailjetContactCreateAndSubscribe
+    public static function contactlistItemUpdate(): MailjetContactlistItemUpdate
     {
-        return (new MailjetContactCreateAndSubscribe())
+        return (new MailjetContactlistItemUpdate())
             ->setListId(12345)
             ->setEmail('new_contact@mail.de')
             ->setName('Contact New')
@@ -27,12 +26,14 @@ class FixturesUtil
                 'property_1' => 'value_1',
                 'property_2' => 'value_2',
             ])
-            ->setAction(MailjetContactCreateAndSubscribe::ACTION_ADD_NO_FORCE);
+            ->setAction(MailjetContactlistItemUpdate::ACTION_ADD_NO_FORCE);
     }
 
-    public static function contactUnsubscribe(): MailjetContactUnsubscribe
+    public static function contactlistItemUnsubscribe(): MailjetContactlistItemUpdate
     {
-        return (new MailjetContactUnsubscribe())
-            ->setListId(12345);
+        return (new MailjetContactlistItemUpdate())
+            ->setListId(12345)
+            ->setEmail('new_contact@mail.de')
+            ->setAction(MailjetContactlistItemUpdate::ACTION_UNSUBSCRIBE);
     }
  }

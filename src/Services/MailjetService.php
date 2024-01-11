@@ -3,7 +3,7 @@
 namespace Faibl\MailjetBundle\Services;
 
 use Faibl\MailjetBundle\Exception\MailjetException;
-use Faibl\MailjetBundle\Model\MailjetContactCreateAndSubscribe;
+use Faibl\MailjetBundle\Model\MailjetContactlistItemUpdate;
 use Faibl\MailjetBundle\Model\MailjetContactUnsubscribe;
 use Faibl\MailjetBundle\Model\MailjetMail;
 use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
@@ -60,30 +60,16 @@ class MailjetService
         return $response->success();
     }
 
-    public function contactCreateAndSubscribe(MailjetContactCreateAndSubscribe $contactCreateAndSubscribe): ?bool
+    public function contactlistItemUpdate(MailjetContactlistItemUpdate $contactlistItemUpdate): ?bool
     {
-        $body = $this->serializer->normalize($contactCreateAndSubscribe);
+        $body = $this->serializer->normalize($contactlistItemUpdate);
 
-        $response = $this->client->post(Resources::$ContactslistManagecontact, ['id' => $contactCreateAndSubscribe->getListId(), 'body' => $body], [
+        $response = $this->client->post(Resources::$ContactslistManagecontact, ['id' => $contactlistItemUpdate->getListId(), 'body' => $body], [
             'version' => 'v3',
             'call' => $this->deliveryEnabled,
         ]);
 
-        $this->logErrors($response, array_merge(['id' => $contactCreateAndSubscribe->getListId()], $body));
-
-        return $response->success();
-    }
-
-    public function contactUnsubscribe(MailjetContactUnsubscribe $contactUnsubscribe): ?bool
-    {
-        $body = $this->serializer->normalize($contactUnsubscribe);
-
-        $response = $this->client->post(Resources::$Listrecipient, ['id' => $contactUnsubscribe->getListId(), 'body' => $body], [
-            'version' => 'v3',
-            'call' => $this->deliveryEnabled,
-        ]);
-
-        $this->logErrors($response, array_merge(['id' => $contactUnsubscribe->getListId()], $body));
+        $this->logErrors($response, array_merge(['id' => $contactlistItemUpdate->getListId()], $body));
 
         return $response->success();
     }

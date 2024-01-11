@@ -11,7 +11,7 @@ class MailjetContactSerializerTest extends FaiblMailjetBundleTestCase
     {
         $this->initBundle('default.yaml');
         $serializer = self::getContainer()->get('fbl_mailjet.serializer.account_1');
-        $contactCreateAndSubscribe = FixturesUtil::contactCreateAndSubscribe();
+        $contactCreateAndSubscribe = FixturesUtil::contactlistItemUpdate();
         $normalized = $serializer->normalize($contactCreateAndSubscribe);
 
         $expected = [
@@ -31,11 +31,14 @@ class MailjetContactSerializerTest extends FaiblMailjetBundleTestCase
     {
         $this->initBundle('default.yaml');
         $serializer = self::getContainer()->get('fbl_mailjet.serializer.account_1');
-        $contactUnsubscribe = FixturesUtil::contactUnsubscribe();
+        $contactUnsubscribe = FixturesUtil::contactlistItemUnsubscribe();
         $normalized = $serializer->normalize($contactUnsubscribe);
 
         $expected = [
-            'IsUnsubscribed' => 'true',
+            'Name' => null,
+            'Properties' => [],
+            'Action' => 'unsub',
+            'Email' => 'new_contact@mail.de',
         ];
 
         $this->assertEquals($expected, $normalized, 'Normalize Contact-Unsubscribe.');

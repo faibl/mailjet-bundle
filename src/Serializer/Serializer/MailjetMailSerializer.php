@@ -2,7 +2,7 @@
 
 namespace Faibl\MailjetBundle\Serializer\Serializer;
 
-use Faibl\MailjetBundle\Serializer\Normalizer\MailjetContactNormalizer;
+use Faibl\MailjetBundle\Serializer\Normalizer\MailjetContactlistItemNormalizer;
 use Faibl\MailjetBundle\Serializer\Normalizer\MailjetContactUnsubscribeNormalizer;
 use Faibl\MailjetBundle\Serializer\Normalizer\MailjetMailNormalizer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -12,7 +12,7 @@ class MailjetMailSerializer extends Serializer
 {
     public function __construct(
         MailjetMailNormalizer $mailjetMailNormalizer,
-        MailjetContactNormalizer $mailjetContactToListNormalizer,
+        MailjetContactlistItemNormalizer $mailjetContactToListNormalizer,
         JsonEncoder $jsonEncoder
     ) {
         parent::__construct(
