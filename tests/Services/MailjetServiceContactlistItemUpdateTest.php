@@ -31,7 +31,36 @@ class MailjetServiceContactlistItemUpdateTest extends FaiblMailjetBundleTestCase
             ->method('post')
             ->with(
                 $this->equalTo(['contactslist', 'ManageContact']),
-                $this->equalTo($expected)
+                $this->equalTo($expected),
+                $this->equalTo([
+                    'version' => 'v3',
+                    'call' => true,
+                    ])
+            );
+
+        self::getContainer()->set('fbl_mailjet.client.account_1', $clientMock);
+
+        /** @var MailjetService $mailjetService */
+        $mailjetService = self::getContainer()->get('fbl_mailjet.service.account_1');
+        $contactCreateAndSubscribe = FixturesUtil::contactlistItemUpdate();
+
+        $mailjetService->contactlistItemUpdate($contactCreateAndSubscribe);
+    }
+
+    public function test_diabled()
+    {
+        $this->initBundle('delivery_disabled.yaml');
+
+        $clientMock = $this->createMock(Client::class);
+        $clientMock->expects($this->once())
+            ->method('post')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                $this->equalTo([
+                    'version' => 'v3',
+                    'call' => false,
+                    ])
             );
 
         self::getContainer()->set('fbl_mailjet.client.account_1', $clientMock);

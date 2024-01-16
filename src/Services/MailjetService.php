@@ -4,7 +4,6 @@ namespace Faibl\MailjetBundle\Services;
 
 use Faibl\MailjetBundle\Exception\MailjetException;
 use Faibl\MailjetBundle\Model\MailjetContactlistItemUpdate;
-use Faibl\MailjetBundle\Model\MailjetContactUnsubscribe;
 use Faibl\MailjetBundle\Model\MailjetMail;
 use Faibl\MailjetBundle\Serializer\Serializer\MailjetMailSerializer;
 use Mailjet\Client;
@@ -76,6 +75,8 @@ class MailjetService
 
     public function post(array $resource, array $args = [], array $options = []): ?bool
     {
+        $options = array_merge(['call' => $this->deliveryEnabled], $options);
+
         $response = $this->client->post($resource, $args, $options);
 
         $this->logErrors($response, ['resource' => $resource, 'args' => $args, 'options' => $options]);

@@ -32,7 +32,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
             // set default values for all accounts
             ->scalarNode('logger')->defaultValue('logger')->end()
-            ->booleanNode('delivery_enabled')->defaultFalse()->end()
+            ->booleanNode('delivery_enabled')->defaultTrue()->end()
             ->scalarNode('delivery_addresses')->defaultNull()->end()
             ->scalarNode('receiver_errors')->defaultNull()->end()
         ;
