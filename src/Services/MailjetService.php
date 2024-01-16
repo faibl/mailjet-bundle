@@ -74,6 +74,15 @@ class MailjetService
         return $response->success();
     }
 
+    public function post(array $resource, array $args = [], array $options = []): ?bool
+    {
+        $response = $this->client->post($resource, $args, $options);
+
+        $this->logErrors($response, ['resource' => $resource, 'args' => $args, 'options' => $options]);
+
+        return $response->success();
+    }
+
     private function logErrors(Response $response, array $body): void
     {
         if ($response->success() === false) {

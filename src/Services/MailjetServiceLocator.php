@@ -51,4 +51,15 @@ class MailjetServiceLocator
 
         return $service->contactlistItemUpdate($contactlistItemUpdate);
     }
+
+    public function post(string $name, array $resource, array $args = [], array $options = []): ?bool
+    {
+        $service = $this->getService($name);
+
+        if (!$service) {
+            throw new \Exception(sprintf('Unknown account %s. Please check your config.', $name));
+        }
+
+        return $service->post($resource, $args, $options);
+    }
 }
